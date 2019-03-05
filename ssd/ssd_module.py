@@ -119,7 +119,7 @@ class LightSSD(nn.Block):
                 blk_forward(x, getattr(self, "blk%d" % (k + 1)),
                             anchor_params.sizes[k], anchor_params.ratios[k],
                             getattr(self, "cls%d" % (k + 1)), getattr(self, "reg%d" % (k + 1)))
-            # print("layer[%d], fmap shape %s, anchor %s" % (k + 1, x.shape, anchors[k].shape))
+            print("SSD:     layer[%d], fmap shape %s, anchor %s" % (k + 1, x.shape, anchors[k].shape))
         return (nd.concat(*anchors, dim=1),
                 concat_preds(cls_preds).reshape((0, -1, self.num_classes + 1)),
                 concat_preds(bbox_preds))

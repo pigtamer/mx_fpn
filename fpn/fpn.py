@@ -20,6 +20,9 @@ def fusionFMaps(lMap, sMap, upconv_ksize=3, method='upconv'):
                      nn.BatchNorm(in_channels=l_channels))
         upconver.initialize(ctx=mx.gpu())  # how to init? should I make the params trainable?
         upconv_sMap = upconver(sMap)
+        # TODO: Modify this. Figure out a way to deal with size problem brought by pooling
+        upconv_sMap = nd.contrib.BilinearResize2D(
+            data=upconv_sMap, height=lMap.shape[-2], width=lMap.shape[-1])
     elif method == 'bilinear':
         upconv_sMap = nd.contrib.BilinearResize2D(
             data=sMap, height=lMap.shape[-2], width=lMap.shape[-1])
@@ -39,9 +42,6 @@ def fusionFMaps(lMap, sMap, upconv_ksize=3, method='upconv'):
     else:
         raise Exception("ERROR! [jcy checkpoint]: Unexpected enlarging method.")
 
-    # TODO: Modify this. Figure out a way to deal with size problem brought by pooling
-    upconv_sMap = nd.contrib.BilinearResize2D(
-        data=upconv_sMap, height=lMap.shape[-2], width=lMap.shape[-1])
     res = nd.add(lMap, upconv_sMap) / 2  # add large fmap with the smaller one
     res = res / nd.max(res)
     # return (res, upconv_sMap)
@@ -91,19 +91,21 @@ class FPN(nn.Block):
         self.ssd_3 = ssd.LightSSD(num_cls=1, num_ach=num_anchors)
 
     def forward(self, x):
+        # x = self.BaseBlk(x)
         fmap_1 = self.feature_blk_1(x)
         fmap_2 = self.feature_blk_2(fmap_1)
         fmap_3 = self.feature_blk_3(fmap_2)
 
         fusion_33 = fmap_3  # placeholder. to be deleted in the future
-        fusion_32 = fusionFMaps(fmap_3, fmap_2)
-        fusion_21 = fusionFMaps(fusion_32, fmap_1)
+        fusion_32 = fusionFMaps(fmap_2, fusion_33, method='upconv')
+        fusion_21 = fusionFMaps(fmap_1, fusion_32, method='upconv')
 
         anchors, cls_preds, bbox_preds = [None] * 3, [None] * 3, [None] * 3
         anchors[2], cls_preds[2], bbox_preds[2] = self.ssd_3(fusion_33)
         anchors[1], cls_preds[1], bbox_preds[1] = self.ssd_2(fusion_32)
         anchors[0], cls_preds[0], bbox_preds[0] = self.ssd_1(fusion_21)
 
+        print("FPN: %s; %s; %s"%(fusion_33.shape, fusion_32.shape, fusion_21.shape))
         return (nd.concat(*anchors, dim=1),
                 nd.concat(*cls_preds, dim=1),
                 nd.concat(*bbox_preds, dim=1))

@@ -12,7 +12,7 @@ net = fpn.FPN(num_layers=3)
 net.initialize(init="Xavier", ctx=ctx)
 
 
-batch_size, edge_size = 1, 256
+batch_size, edge_size = 1, 448
 train_iter, _ = predata.load_data_pikachu(batch_size, edge_size)
 batch = train_iter.next()
 
@@ -81,7 +81,7 @@ else:
     net.save_parameters("myfpn.params")
 
 img = image.imread('/home/cunyuan/code/img/pikachu.jpg')
-feature = image.imresize(img, 256, 256).astype('float32')
+feature = image.imresize(img, 448, 448).astype('float32')
 X = feature.transpose((2, 0, 1)).expand_dims(axis=0)
 
 
@@ -114,7 +114,7 @@ def display(img, output, threshold):
         utils.show_bboxes(fig.axes, bbox, '%.2f' % score, 'w')
 
 
-display(img, output, threshold=0.1)
+display(img, output, threshold=0.99)
 plt.show()
 
 
