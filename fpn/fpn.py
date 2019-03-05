@@ -105,7 +105,7 @@ class FPN(nn.Block):
         anchors[1], cls_preds[1], bbox_preds[1] = self.ssd_2(fusion_32)
         anchors[0], cls_preds[0], bbox_preds[0] = self.ssd_1(fusion_21)
 
-        print("FPN: %s; %s; %s"%(fusion_33.shape, fusion_32.shape, fusion_21.shape))
+        print("FPN:     [top -> bottom] fusion[3]: %s;\n fusion[2]: %s;\n fusion[1]: %s\n"%(fusion_33.shape, fusion_32.shape, fusion_21.shape))
         return (nd.concat(*anchors, dim=1),
                 nd.concat(*cls_preds, dim=1),
                 nd.concat(*bbox_preds, dim=1))
