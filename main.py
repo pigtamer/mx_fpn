@@ -1,6 +1,5 @@
-import cv2 as cv
 import mxnet as mx
-from mxnet.gluon import nn, loss as gloss, data as gdata, contrib
+from mxnet.gluon import nn, loss as gloss, data as gdata
 from mxnet import nd, image, autograd
 from utils import utils, predata
 import matplotlib.pyplot as plt
@@ -8,15 +7,30 @@ import fpn
 import time, argparse
 
 # parsing cli arguments
-
-
+parser = argparse.ArgumentParser()
+parser.add_argument("-l", "--load", dest="load",
+                    help="bool: load model to directly infer rather than training",
+                    type=bool, default=True)
+parser.add_argument("-b", "--base", dest="base",
+                    help="bool: using additional base network",
+                    type=bool, default=False)
+parser.add_argument("-s", "--imsize", dest="input_size",
+                    help="int: input size",
+                    type=int, default=448)
+parser.add_argument("-m", "--model_path", dest="model_path",
+                    help="str: the path to load and save model",
+                    type=str, default="./myfpn.params")
+parser.add_argument("-t", "--test_path", dest="test_path",
+                    help="str: the path to your test img",
+                    type=str, default="./img/pikachu_ms.jpg")
+args = parser.parse_args()
 
 ctx = mx.gpu()
 net = fpn.FPN(num_layers=3)
 net.initialize(init="Xavier", ctx=ctx)
 
 
-batch_size, edge_size = 1, 448
+batch_size, edge_size = 1, args.input_size
 train_iter, _ = predata.load_data_pikachu(batch_size, edge_size)
 batch = train_iter.next()
 
@@ -51,9 +65,9 @@ def bbox_eval(bbox_preds, bbox_labels, bbox_masks):
     return ((bbox_labels - bbox_preds) * bbox_masks).abs().sum().asscalar()
 
 
-IF_LOAD_MODEL = True
+IF_LOAD_MODEL = args.load
 if IF_LOAD_MODEL:
-    net.load_parameters("./myfpn.params")
+    net.load_parameters(args.model_path)
 else:
     for epoch in range(20):
         acc_sum, mae_sum, n, m = 0.0, 0.0, 0, 0
@@ -82,10 +96,10 @@ else:
         if (epoch + 1) % 1 == 0:
             print('epoch %2d, class err %.2e, bbox mae %.2e, time %.1f sec' % (
                 epoch + 1, 1 - acc_sum / n, mae_sum / m, time.time() - start))
-    net.save_parameters("myfpn.params")
+    net.save_parameters(args.model_path)
 
-img = image.imread('/home/cunyuan/code/img/pikachu.jpg')
-feature = image.imresize(img, 448, 448).astype('float32')
+img = image.imread(args.test_path)
+feature = image.imresize(img, args.input_size, args.input_size).astype('float32')
 X = feature.transpose((2, 0, 1)).expand_dims(axis=0)
 
 
@@ -111,14 +125,14 @@ def display(img, output, threshold):
     fig = utils.plt.imshow(img.asnumpy())
     for row in output:
         score = row[1].asscalar()
-        if score < threshold:
+        if score < threshold[0] or score > threshold[1]:
             continue
         h, w = img.shape[0:2]
         bbox = [row[2:6] * nd.array((w, h, w, h), ctx=row.context)]
         utils.show_bboxes(fig.axes, bbox, '%.2f' % score, 'w')
 
 
-display(img, output, threshold=0.9)
+display(img, output, threshold=(0.8, 1))
 plt.show()
 
 
