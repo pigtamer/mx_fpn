@@ -74,7 +74,7 @@ class FPN(nn.Block):
                                nn.Conv2D(channels=256, kernel_size=3, padding=1),
                                nn.Activation('relu'),
                                nn.MaxPool2D(2),
-                               nn.BatchNorm(in_channels=512))
+                               nn.BatchNorm(in_channels=256))
         self.ssd_1 = ssd.LightSSD(num_cls=1, num_ach=num_anchors)
 
         self.feature_blk_2 = nn.Sequential()
