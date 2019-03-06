@@ -7,6 +7,10 @@ import matplotlib.pyplot as plt
 import fpn
 import time, argparse
 
+# parsing cli arguments
+
+
+
 ctx = mx.gpu()
 net = fpn.FPN(num_layers=3)
 net.initialize(init="Xavier", ctx=ctx)
@@ -51,7 +55,7 @@ IF_LOAD_MODEL = True
 if IF_LOAD_MODEL:
     net.load_parameters("./myfpn.params")
 else:
-    for epoch in range(10):
+    for epoch in range(20):
         acc_sum, mae_sum, n, m = 0.0, 0.0, 0, 0
         train_iter.reset()  # reset data iterator to read-in images from beginning
         start = time.time()

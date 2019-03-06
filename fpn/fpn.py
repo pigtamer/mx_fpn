@@ -10,9 +10,9 @@ def fusionFMaps(lMap, sMap, upconv_ksize=3, method='upconv'):
     # methods: 'upconv', 'lin_interpol'
     s_channels = sMap.shape[1]
     l_channels = lMap.shape[1]
-    if s_channels != l_channels:
-        raise ValueError("ERROR [jcy checkpoint]: Inconsistent feature-map channels."
-                         " Check the channels of neighboring layers. ")
+    # if s_channels != l_channels:
+    #     raise ValueError("ERROR [jcy checkpoint]: Inconsistent feature-map channels."
+    #                      " Check the channels of neighboring layers. ")
     if method == 'upconv':
         upconver = nn.Sequential()
         upconver.add(nn.Conv2DTranspose(channels=l_channels, kernel_size=upconv_ksize,
@@ -111,12 +111,12 @@ class FPN(nn.Block):
         anchors[1], cls_preds[1], bbox_preds[1] = self.ssd_2(fusion_32)
         anchors[0], cls_preds[0], bbox_preds[0] = self.ssd_1(fusion_21)
 
-        print("----------\n"
-              "FPN:     [top -> bottom]\n"
-              "         fusion[3]: %s;\n "
-              "         fusion[2]: %s;\n "
-              "         fusion[1]: %s"
-              %(fusion_33.shape, fusion_32.shape, fusion_21.shape))
+        # print("----------\n"
+        #       "FPN:     [top -> bottom]\n"
+        #       "         fusion[3]: %s;\n "
+        #       "         fusion[2]: %s;\n "
+        #       "         fusion[1]: %s"
+        #       %(fusion_33.shape, fusion_32.shape, fusion_21.shape))
         return (nd.concat(*anchors, dim=1),
                 nd.concat(*cls_preds, dim=1),
                 nd.concat(*bbox_preds, dim=1))
@@ -131,9 +131,5 @@ class FPN(nn.Block):
 #         expand_dims(0).astype('float32')
 #     print(x1.shape)
 #
-#
-#
 #     fusionFMaps(x, x1)
 #
-#
-# test()
