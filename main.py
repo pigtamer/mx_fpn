@@ -5,7 +5,7 @@ from mxnet import nd, image, autograd
 from utils import utils, predata
 import matplotlib.pyplot as plt
 import fpn
-import time
+import time, argparse
 
 ctx = mx.gpu()
 net = fpn.FPN(num_layers=3)
@@ -47,7 +47,7 @@ def bbox_eval(bbox_preds, bbox_labels, bbox_masks):
     return ((bbox_labels - bbox_preds) * bbox_masks).abs().sum().asscalar()
 
 
-IF_LOAD_MODEL = False
+IF_LOAD_MODEL = True
 if IF_LOAD_MODEL:
     net.load_parameters("./myfpn.params")
 else:
@@ -114,7 +114,7 @@ def display(img, output, threshold):
         utils.show_bboxes(fig.axes, bbox, '%.2f' % score, 'w')
 
 
-display(img, output, threshold=0.99)
+display(img, output, threshold=0.9)
 plt.show()
 
 

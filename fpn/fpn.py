@@ -69,7 +69,9 @@ class FPN(nn.Block):
         # 1 -> 3 : bottom -> top
         # self.BaseBlk = ssd.BaseNetwork(True)
         self.feature_blk_1 = nn.Sequential()
-        self.feature_blk_1.add(nn.Conv2D(channels=512, kernel_size=3, padding=1),
+        self.feature_blk_1.add(nn.Conv2D(channels=256, kernel_size=3, padding=1),
+                               nn.Conv2D(channels=256, kernel_size=3, padding=1),
+                               nn.Conv2D(channels=256, kernel_size=3, padding=1),
                                nn.Activation('relu'),
                                nn.MaxPool2D(2),
                                nn.BatchNorm(in_channels=512))
@@ -77,6 +79,8 @@ class FPN(nn.Block):
 
         self.feature_blk_2 = nn.Sequential()
         self.feature_blk_2.add(nn.Conv2D(channels=512, kernel_size=3, padding=1),
+                               nn.Conv2D(channels=512, kernel_size=3, padding=1),
+                               nn.Conv2D(channels=512, kernel_size=3, padding=1),
                                nn.Activation('relu'),
                                nn.MaxPool2D(2),
                                nn.BatchNorm(in_channels=512))
@@ -85,6 +89,8 @@ class FPN(nn.Block):
 
         self.feature_blk_3 = nn.Sequential()
         self.feature_blk_3.add(nn.Conv2D(channels=512, kernel_size=3, padding=1),
+                               nn.Conv2D(channels=512, kernel_size=3, padding=1),
+                               nn.Conv2D(channels=512, kernel_size=3, padding=1),
                                nn.Activation('relu'),
                                nn.MaxPool2D(2),
                                nn.BatchNorm(in_channels=512))
@@ -105,7 +111,12 @@ class FPN(nn.Block):
         anchors[1], cls_preds[1], bbox_preds[1] = self.ssd_2(fusion_32)
         anchors[0], cls_preds[0], bbox_preds[0] = self.ssd_1(fusion_21)
 
-        print("FPN:     [top -> bottom] fusion[3]: %s;\n fusion[2]: %s;\n fusion[1]: %s\n"%(fusion_33.shape, fusion_32.shape, fusion_21.shape))
+        print("----------\n"
+              "FPN:     [top -> bottom]\n"
+              "         fusion[3]: %s;\n "
+              "         fusion[2]: %s;\n "
+              "         fusion[1]: %s"
+              %(fusion_33.shape, fusion_32.shape, fusion_21.shape))
         return (nd.concat(*anchors, dim=1),
                 nd.concat(*cls_preds, dim=1),
                 nd.concat(*bbox_preds, dim=1))
