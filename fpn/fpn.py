@@ -72,7 +72,7 @@ class FPN(nn.Block):
         #  --{input}--
         #
         # 1 -> 3 : bottom -> top
-        # self.BaseBlk = ssd.BaseNetwork(True)
+        self.BaseBlk = ssd.BaseNetwork(True)
         self.feature_blk_1 = nn.Sequential()
         self.feature_blk_1.add(nn.Conv2D(channels=512, kernel_size=3, padding=1),
                                nn.Activation('relu'),
@@ -108,7 +108,7 @@ class FPN(nn.Block):
         self.ssd_3 = ssd.LightRetina(num_cls=1, num_ach=num_anchors)
 
     def forward(self, x):
-        # x = self.BaseBlk(x)
+        x = self.BaseBlk(x)
         fmap_1 = self.feature_blk_1(x)
         fmap_2 = self.feature_blk_2(fmap_1)
         fmap_3 = self.feature_blk_3(fmap_2)
