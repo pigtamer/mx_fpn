@@ -29,7 +29,6 @@ ctx = mx.gpu()
 net = fpn.FPN(num_layers=3)
 net.initialize(init="Xavier", ctx=ctx)
 
-
 batch_size, edge_size = 1, args.input_size
 train_iter, _ = predata.load_data_pikachu(batch_size, edge_size)
 batch = train_iter.next()
@@ -79,7 +78,7 @@ else:
             with autograd.record():
                 # generate anchors and generate bboxes
                 anchors, cls_preds, bbox_preds = net(X)
-                # print(net)
+                print(net)
                 # assign classes and bboxes for each anchor
                 bbox_labels, bbox_masks, cls_labels = nd.contrib.MultiBoxTarget(anchors, Y,
                                                                                 cls_preds.transpose((0, 2, 1)))
@@ -106,7 +105,7 @@ X = feature.transpose((2, 0, 1)).expand_dims(axis=0)
 def predict(X):
     anchors, cls_preds, bbox_preds = net(X.as_in_context(ctx))
     cls_probs = cls_preds.softmax().transpose((0, 2, 1))
-    output = nd.contrib.MultiBoxDetection(cls_probs, bbox_preds, anchors)
+    output = nd.contrib.MultiBoxDetection(cls_probs, bbox_preds, anchors, nms_threshold=0.5)
     idx = [i for i, row in enumerate(output[0]) if row[0].asscalar() != -1]
     if idx == []:
         raise ValueError("NO TARGET. Seq Terminated.")

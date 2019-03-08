@@ -33,11 +33,11 @@ def fusionFMaps(lMap, sMap, upconv_ksize=3, method='upconv'):
         # ^ this is not a problem asshole. Do you think that color images are special?
         chan_adapter = nn.Sequential()
         _ = nn.Conv2D(channels=l_channels, kernel_size=1, in_channels=s_channels)
-        _.initialize()
+        _.initialize(ctx=mx.gpu())
         _.weight.set_data(nd.ones((l_channels, s_channels, 1, 1)) / s_channels)
         chan_adapter.add(_,
                          nn.BatchNorm(in_channels=l_channels))
-        chan_adapter.initialize()
+        chan_adapter.initialize(ctx=mx.gpu())
         upconv_sMap = chan_adapter(upconv_sMap)
     else:
         raise Exception("ERROR! [jcy checkpoint]: Unexpected enlarging method.")
@@ -114,8 +114,8 @@ class FPN(nn.Block):
         fmap_3 = self.feature_blk_3(fmap_2)
 
         fusion_33 = fmap_3  # placeholder. to be deleted in the future
-        fusion_32 = fusionFMaps(fmap_2, fusion_33, method='upconv')
-        fusion_21 = fusionFMaps(fmap_1, fusion_32, method='upconv')
+        fusion_32 = fusionFMaps(fmap_2, fusion_33, method='bilinear')
+        fusion_21 = fusionFMaps(fmap_1, fusion_32, method='bilinear')
 
         anchors, cls_preds, bbox_preds = [None] * 3, [None] * 3, [None] * 3
         anchors[2], cls_preds[2], bbox_preds[2] = self.ssd_3(fusion_33)
