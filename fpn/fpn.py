@@ -74,38 +74,38 @@ class FPN(nn.Block):
         # 1 -> 3 : bottom -> top
         # self.BaseBlk = ssd.BaseNetwork(True)
         self.feature_blk_1 = nn.Sequential()
-        self.feature_blk_1.add(nn.Conv2D(channels=256, kernel_size=3, padding=1),
-                               # nn.Activation('relu'),
-                               nn.Conv2D(channels=256, kernel_size=3, padding=1),
-                               # nn.Activation('relu'),
-                               nn.Conv2D(channels=256, kernel_size=3, padding=1),
+        self.feature_blk_1.add(nn.Conv2D(channels=512, kernel_size=3, padding=1),
+                               nn.Activation('relu'),
+                               nn.Conv2D(channels=512, kernel_size=3, padding=1),
+                               nn.Activation('relu'),
+                               nn.Conv2D(channels=512, kernel_size=3, padding=1),
                                nn.Activation('relu'),
                                nn.MaxPool2D(2),
-                               nn.BatchNorm(in_channels=256))
-        self.ssd_1 = ssd.LightSSD(num_cls=1, num_ach=num_anchors)
+                               nn.BatchNorm(in_channels=512))
+        self.ssd_1 = ssd.LightRetina(num_cls=1, num_ach=num_anchors)
 
         self.feature_blk_2 = nn.Sequential()
         self.feature_blk_2.add(nn.Conv2D(channels=512, kernel_size=3, padding=1),
-                               # nn.Activation('relu'),
+                               nn.Activation('relu'),
                                nn.Conv2D(channels=512, kernel_size=3, padding=1),
-                               # nn.Activation('relu'),
+                               nn.Activation('relu'),
                                nn.Conv2D(channels=512, kernel_size=3, padding=1),
                                nn.Activation('relu'),
                                nn.MaxPool2D(2),
                                nn.BatchNorm(in_channels=512))
 
-        self.ssd_2 = ssd.LightSSD(num_cls=1, num_ach=num_anchors)
+        self.ssd_2 = ssd.LightRetina(num_cls=1, num_ach=num_anchors)
 
         self.feature_blk_3 = nn.Sequential()
         self.feature_blk_3.add(nn.Conv2D(channels=512, kernel_size=3, padding=1),
-                               # nn.Activation('relu'),
+                               nn.Activation('relu'),
                                nn.Conv2D(channels=512, kernel_size=3, padding=1),
-                               # nn.Activation('relu'),
+                               nn.Activation('relu'),
                                nn.Conv2D(channels=512, kernel_size=3, padding=1),
                                nn.Activation('relu'),
                                nn.MaxPool2D(2),
                                nn.BatchNorm(in_channels=512))
-        self.ssd_3 = ssd.LightSSD(num_cls=1, num_ach=num_anchors)
+        self.ssd_3 = ssd.LightRetina(num_cls=1, num_ach=num_anchors)
 
     def forward(self, x):
         # x = self.BaseBlk(x)
@@ -114,8 +114,8 @@ class FPN(nn.Block):
         fmap_3 = self.feature_blk_3(fmap_2)
 
         fusion_33 = fmap_3  # placeholder. to be deleted in the future
-        fusion_32 = fusionFMaps(fmap_2, fusion_33, method='bilinear')
-        fusion_21 = fusionFMaps(fmap_1, fusion_32, method='bilinear')
+        fusion_32 = fusionFMaps(fmap_2, fusion_33, method='upconv')
+        fusion_21 = fusionFMaps(fmap_1, fusion_32, method='upconv')
 
         anchors, cls_preds, bbox_preds = [None] * 3, [None] * 3, [None] * 3
         anchors[2], cls_preds[2], bbox_preds[2] = self.ssd_3(fusion_33)

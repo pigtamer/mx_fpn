@@ -10,10 +10,10 @@ import time, argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("-l", "--load", dest="load",
                     help="bool: load model to directly infer rather than training",
-                    type=bool, default=True)
+                    type=int, default=1)
 parser.add_argument("-b", "--base", dest="base",
                     help="bool: using additional base network",
-                    type=bool, default=False)
+                    type=int, default=0)
 parser.add_argument("-s", "--imsize", dest="input_size",
                     help="int: input size",
                     type=int, default=448)

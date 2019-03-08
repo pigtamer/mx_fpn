@@ -124,6 +124,37 @@ class LightSSD(nn.Block):
                 concat_preds(cls_preds).reshape((0, -1, self.num_classes + 1)),
                 concat_preds(bbox_preds))
 
+class LightRetina(nn.Block):
+    def __init__(self, num_cls, num_ach, IF_TINY=True, **kwargs):
+        super(LightRetina, self).__init__(**kwargs)
+        self.num_classes = num_cls
+        self._IF_TINY = IF_TINY
+        if not self._IF_TINY:
+            self.BaseBlk = BaseNetwork(False)
+        self.blk1 = nn.Sequential()
+        self.blk1.add(nn.Conv2D(channels=512, kernel_size=3, strides=1, padding=1),
+                      nn.Conv2D(channels=512, kernel_size=1, strides=1, padding=0),
+                      nn.Conv2D(channels=512, kernel_size=3, strides=1, padding=1),
+                      nn.Conv2D(channels=512, kernel_size=1, strides=1, padding=0),
+                      nn.BatchNorm(in_channels=512),
+                      nn.Activation('relu'))
+
+        self.cls1 = genClsPredictor(num_cls, num_ach)
+        self.reg1 = genBBoxRegressor(num_ach)
+
+    def forward(self, x):
+        if not self._IF_TINY:
+            x = self.BaseBlk(x)
+        anchors, cls_preds, bbox_preds = [None], [None], [None]
+        for k in range(1):
+            (x, anchors[k], cls_preds[k], bbox_preds[k]) = \
+                blk_forward(x, getattr(self, "blk%d" % (k + 1)),
+                            anchor_params.sizes[k], anchor_params.ratios[k],
+                            getattr(self, "cls%d" % (k + 1)), getattr(self, "reg%d" % (k + 1)))
+            print("SSD:     layer[%d], fmap shape %s, anchor %s" % (k + 1, x.shape, anchors[k].shape))
+        return (nd.concat(*anchors, dim=1),
+                concat_preds(cls_preds).reshape((0, -1, self.num_classes + 1)),
+                concat_preds(bbox_preds))
 
 class BaseNetwork(nn.Block):  # VGG base network, without fc
     def __init__(self, IF_TINY, **kwargs):
