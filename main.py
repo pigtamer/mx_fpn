@@ -22,7 +22,7 @@ parser.add_argument("-m", "--model_path", dest="model_path",
                     type=str, default="./myfpn.params")
 parser.add_argument("-t", "--test_path", dest="test_path",
                     help="str: the path to your test img",
-                    type=str, default="./img/pikachu_ms.jpg")
+                    type=str, default="./img/uav1.jpg")
 args = parser.parse_args()
 
 ctx = mx.gpu()
@@ -30,7 +30,8 @@ net = fpn.FPN(num_layers=3)
 net.initialize(init="Xavier", ctx=ctx)
 
 batch_size, edge_size = 1, args.input_size
-train_iter, _ = predata.load_data_pikachu(batch_size, edge_size)
+# train_iter, _ = predata.load_data_pikachu(batch_size, edge_size)
+train_iter, _ = predata.load_data_uav(batch_size, edge_size)
 batch = train_iter.next()
 
 if batch_size == 25:  # show fucking pikachuus in grid
@@ -105,7 +106,7 @@ X = feature.transpose((2, 0, 1)).expand_dims(axis=0)
 def predict(X):
     anchors, cls_preds, bbox_preds = net(X.as_in_context(ctx))
     cls_probs = cls_preds.softmax().transpose((0, 2, 1))
-    output = nd.contrib.MultiBoxDetection(cls_probs, bbox_preds, anchors, nms_threshold=0.5)
+    output = nd.contrib.MultiBoxDetection(cls_probs, bbox_preds, anchors)
     idx = [i for i, row in enumerate(output[0]) if row[0].asscalar() != -1]
     if idx == []:
         raise ValueError("NO TARGET. Seq Terminated.")
@@ -131,7 +132,7 @@ def display(img, output, threshold):
         utils.show_bboxes(fig.axes, bbox, '%.2f' % score, 'w')
 
 
-display(img, output, threshold=(0.8, 1))
+display(img, output, threshold=(0.9, 1))
 plt.show()
 
 
