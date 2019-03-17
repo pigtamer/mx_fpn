@@ -10,7 +10,7 @@ import time, argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("-l", "--load", dest="load",
                     help="bool: load model to directly infer rather than training",
-                    type=int, default=1)
+                    type=int, default=0)
 parser.add_argument("-b", "--base", dest="base",
                     help="bool: using additional base network",
                     type=int, default=0)
@@ -28,6 +28,7 @@ args = parser.parse_args()
 ctx = mx.gpu()
 net = fpn.FPN(num_layers=3)
 net.initialize(init="Xavier", ctx=ctx)
+net.hybridize()
 
 batch_size, edge_size = 1, args.input_size
 # train_iter, _ = predata.load_data_pikachu(batch_size, edge_size)

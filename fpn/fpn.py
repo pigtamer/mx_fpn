@@ -1,6 +1,6 @@
 import mxnet as mx
 from mxnet.gluon import nn, contrib
-from mxnet import nd
+from mxnet import nd, sym
 from ssd.anchor_params import *
 from utils.utils import concat_preds
 import ssd
@@ -14,7 +14,7 @@ def fusionFMaps(lMap, sMap, upconv_ksize=3, method='upconv'):
     #     raise ValueError("ERROR [jcy checkpoint]: Inconsistent feature-map channels."
     #                      " Check the channels of neighboring layers. ")
     if method == 'upconv':
-        upconver = nn.Sequential()
+        upconver = nn.HybridSequential()
         upconver.add(nn.Conv2DTranspose(channels=l_channels, kernel_size=upconv_ksize,
                                         activation='relu'),
                      nn.BatchNorm(in_channels=l_channels))
@@ -31,7 +31,7 @@ def fusionFMaps(lMap, sMap, upconv_ksize=3, method='upconv'):
         # the params in upconv blks
         # ^
         # ^ this is not a problem asshole. Do you think that color images are special?
-        chan_adapter = nn.Sequential()
+        chan_adapter = nn.HybridSequential()
         _ = nn.Conv2D(channels=l_channels, kernel_size=1, in_channels=s_channels)
         _.initialize(ctx=mx.gpu())
         _.weight.set_data(nd.ones((l_channels, s_channels, 1, 1)) / s_channels)
@@ -42,12 +42,48 @@ def fusionFMaps(lMap, sMap, upconv_ksize=3, method='upconv'):
     else:
         raise Exception("ERROR! [jcy checkpoint]: Unexpected enlarging method.")
 
-    res = nd.add(lMap, upconv_sMap) / 2  # add large fmap with the smaller one
+    res = nd.add(lMap + upconv_sMap) / 2  # add large fmap with the smaller one
     res = res / nd.max(res)
     # return (res, upconv_sMap)
     return res
 
-class FPN(nn.Block):
+def hybrid_fusionFMaps(lMap, sMap, upconv_ksize=(3,3), method='upconv'):
+    # lMap/sMap stand for large/small feature maps
+    # methods: 'upconv', 'lin_interpol'
+
+    if method == 'upconv':
+        upconver = sym.Deconvolution(data=sMap, kernel=upconv_ksize)
+        upconver = sym.Activation(data=upconver, act_type='relu')
+        upconv_sMap = sym.BatchNorm(data=upconver)
+        # upconver.initialize(ctx=mx.gpu())  # how to init? should I make the params trainable?
+        # TODO: Modify this. Figure out a way to deal with size problem brought by pooling
+        upconv_sMap = sym.contrib.BilinearResize2D(
+            data=upconv_sMap)
+    elif method == 'bilinear':
+        upconv_sMap = nd.contrib.BilinearResize2D(
+            data=sMap, height=lMap.shape[-2], width=lMap.shape[-1])
+        # NO !! We must unify the feature channels of the up-down path! Or the color would be eliminated.
+        # consider re-enable this when things are done and you are ready for the training of
+        # the params in upconv blks
+        # ^
+        # ^ this is not a problem asshole. Do you think that color images are special?
+        chan_adapter = sym.HybridSequential()
+        _ = sym.Convolution(data=sMap, kernel_size=(1,1))
+        _.initialize(ctx=mx.gpu())
+        _.weight.set_data(nd.ones((l_channels, s_channels, 1, 1)) / s_channels)
+        chan_adapter.add(_,
+                         sym.BatchNorm(in_channels=l_channels))
+        chan_adapter.initialize(ctx=mx.gpu())
+        upconv_sMap = chan_adapter(upconv_sMap)
+    else:
+        raise Exception("ERROR! [jcy checkpoint]: Unexpected enlarging method.")
+
+    res = (lMap, upconv_sMap) / 2  # add large fmap with the smaller one
+    res = res / nd.max(res)
+    # return (res, upconv_sMap)
+    return res
+
+class FPN(nn.HybridBlock):
     def __init__(self, num_layers=3, num_classes=1, **kwargs):
         super().__init__(**kwargs)
         #
@@ -73,7 +109,7 @@ class FPN(nn.Block):
         #
         # 1 -> 3 : bottom -> top
         self.BaseBlk = ssd.BaseNetwork(True)
-        self.feature_blk_1 = nn.Sequential()
+        self.feature_blk_1 = nn.HybridSequential()
         self.feature_blk_1.add(nn.Conv2D(channels=512, kernel_size=3, padding=1),
                                nn.Activation('relu'),
                                nn.Conv2D(channels=512, kernel_size=3, padding=1),
@@ -84,7 +120,7 @@ class FPN(nn.Block):
                                nn.BatchNorm(in_channels=512))
         self.ssd_1 = ssd.LightRetina(num_cls=1, num_ach=num_anchors)
 
-        self.feature_blk_2 = nn.Sequential()
+        self.feature_blk_2 = nn.HybridSequential()
         self.feature_blk_2.add(nn.Conv2D(channels=512, kernel_size=3, padding=1),
                                nn.Activation('relu'),
                                nn.Conv2D(channels=512, kernel_size=3, padding=1),
@@ -96,7 +132,7 @@ class FPN(nn.Block):
 
         self.ssd_2 = ssd.LightRetina(num_cls=1, num_ach=num_anchors)
 
-        self.feature_blk_3 = nn.Sequential()
+        self.feature_blk_3 = nn.HybridSequential()
         self.feature_blk_3.add(nn.Conv2D(channels=512, kernel_size=3, padding=1),
                                nn.Activation('relu'),
                                nn.Conv2D(channels=512, kernel_size=3, padding=1),
@@ -107,15 +143,15 @@ class FPN(nn.Block):
                                nn.BatchNorm(in_channels=512))
         self.ssd_3 = ssd.LightRetina(num_cls=1, num_ach=num_anchors)
 
-    def forward(self, x):
+    def hybrid_forward(self, F, x):
         x = self.BaseBlk(x)
         fmap_1 = self.feature_blk_1(x)
         fmap_2 = self.feature_blk_2(fmap_1)
         fmap_3 = self.feature_blk_3(fmap_2)
 
         fusion_33 = fmap_3  # placeholder. to be deleted in the future
-        fusion_32 = fusionFMaps(fmap_2, fusion_33, method='upconv')
-        fusion_21 = fusionFMaps(fmap_1, fusion_32, method='upconv')
+        fusion_32 = hybrid_fusionFMaps(fmap_2, fusion_33, method='upconv')
+        fusion_21 = hybrid_fusionFMaps(fmap_1, fusion_32, method='upconv')
 
         anchors, cls_preds, bbox_preds = [None] * 3, [None] * 3, [None] * 3
         anchors[2], cls_preds[2], bbox_preds[2] = self.ssd_3(fusion_33)
@@ -130,9 +166,9 @@ class FPN(nn.Block):
               "         input    : %s;\n"
               "-----------------------------------------------\n"
               %(fusion_33.shape, fusion_32.shape, fusion_21.shape, x.shape))
-        return (nd.concat(*anchors, dim=1),
-                nd.concat(*cls_preds, dim=1),
-                nd.concat(*bbox_preds, dim=1))
+        return (sym.concat(*anchors, dim=1),
+                sym.concat(*cls_preds, dim=1),
+                sym.concat(*bbox_preds, dim=1))
 
 # def test():
 #     from mxnet import image

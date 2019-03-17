@@ -28,6 +28,12 @@ def flatten_pred(pred):
 def concat_preds(preds):
     return nd.concat(*[flatten_pred(p) for p in preds], dim=1)
 
+def hybrid_flatten_pred(sym_pred):
+    return sym.transpose(sym_pred, (0, 2, 3, 1)).flatten()
+
+
+def hybrid_concat_preds(sym_preds):
+    return sym.concat(*[hybrid_flatten_pred(p) for p in sym_preds], dim=1)
 
 def fmap_grid(fmaplist):
     def factor(n):
