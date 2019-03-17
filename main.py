@@ -70,7 +70,7 @@ IF_LOAD_MODEL = args.load
 if IF_LOAD_MODEL:
     net.load_parameters(args.model_path)
 else:
-    for epoch in range(10):
+    for epoch in range(5):
         acc_sum, mae_sum, n, m = 0.0, 0.0, 0, 0
         train_iter.reset()  # reset data iterator to read-in images from beginning
         start = time.time()
@@ -80,7 +80,9 @@ else:
             with autograd.record():
                 # generate anchors and generate bboxes
                 anchors, cls_preds, bbox_preds = net(X)
-                # print(net)
+                print(net)
+                net.export('FPN')
+
                 # assign classes and bboxes for each anchor
                 bbox_labels, bbox_masks, cls_labels = nd.contrib.MultiBoxTarget(anchors, Y,
                                                                                 cls_preds.transpose((0, 2, 1)))

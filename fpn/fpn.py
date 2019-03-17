@@ -54,17 +54,16 @@ def hybrid_fusionFMaps(lMap, sMap, upconv_ksize=(3, 3), method='upconv'):
     # methods: 'upconv', 'lin_interpol'
 
     if method == 'upconv':
-        # upconver = sym.Deconvolution(data=sMap, kernel=upconv_ksize,
-        #                              num_filter=512, stride=(1,1), weight = sym.random.normal(0,1,(512,512,3,3)))
-        # upconver = sym.Activation(data=upconver, act_type='relu')
-        # upconv_sMap = sym.BatchNorm(data=upconver, gamma=sym.random_gamma(alpha=9, beta=0.5, shape=(2,2)))
+        raise Exception("NOT IMPLEMENTED YET.")
+        upconver = sym.Deconvolution(data=sMap, kernel=upconv_ksize,
+                                     num_filter=512, stride=(1,1), weight = sym.random.normal(0,1,(512,512,3,3)))
+        upconver = sym.Activation(data=upconver, act_type='relu')
+        upconv_sMap = sym.BatchNorm(data=upconver, gamma=sym.random_gamma(alpha=9, beta=0.5, shape=(2,2)))
         # upconver.initialize(ctx=mx.gpu())  # how to init? should I make the params trainable?
         # TODO: Modify this. Figure out a way to deal with size problem brought by pooling
         upconv_sMap = sym.UpSampling(sMap, scale=2, sample_type="nearest")
     elif method == 'bilinear':
-        upconv_sMap = sym.contrib.BilinearResize2D(data=sMap,
-                                                   scale_height=2., scale_width=2.)
-
+        upconv_sMap = sym.UpSampling(sMap, scale=2, sample_type="nearest")
         # upconv_sMap = sym.Convolution(data=upconv_sMap, kernel_size=(1,1))
         # _.weight.set_data(nd.ones((l_channels, s_channels, 1, 1)) / s_channels)
         # upconv_sMap = sym.BatchNorm(data=upconv_sMap)
@@ -144,8 +143,8 @@ class FPN(nn.HybridBlock):
         fmap_3 = self.feature_blk_3(fmap_2)
 
         fusion_33 = fmap_3  # placeholder. to be deleted in the future
-        fusion_32 = hybrid_fusionFMaps(fmap_2, fusion_33, method='upconv')
-        fusion_21 = hybrid_fusionFMaps(fmap_1, fusion_32, method='upconv')
+        fusion_32 = hybrid_fusionFMaps(fmap_2, fusion_33, method='bilinear')
+        fusion_21 = hybrid_fusionFMaps(fmap_1, fusion_32, method='bilinear')
 
         anchors, cls_preds, bbox_preds = [None] * 3, [None] * 3, [None] * 3
         anchors[2], cls_preds[2], bbox_preds[2] = self.ssd_3(fusion_33)
