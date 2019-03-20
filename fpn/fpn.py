@@ -12,10 +12,11 @@ class ChannelAdapt(nn.HybridBlock):
         super(ChannelAdapt, self).__init__()
         self.net = nn.HybridSequential()
         self.net.add(
-            nn.Conv2D(channels=out_channels, kernel_size=(1,1)),
+            nn.Conv2D(channels=out_channels, kernel_size=(1, 1)),
             nn.BatchNorm(in_channels=out_channels),
             nn.Activation(activation='relu')
         )
+
     def hybrid_forward(self, F, x, *args, **kwargs):
         return self.net(x)
 
@@ -70,7 +71,7 @@ def hybrid_fusionFMaps(lMap, sMap, out_channels=1024, method='upconv'):
         # TODO: Modify this. Figure out a way to deal with size problem brought by pooling
         upconv_sMap = sym.UpSampling(sMap, scale=2, sample_type="nearest")
     elif method == 'bilinear':
-        upconv_sMap = sym.UpSampling(sMap, scale=4, sample_type="nearest")
+        upconv_sMap = sym.UpSampling(sMap, scale=2, sample_type="nearest")
 
     else:
         raise Exception("ERROR! [jcy checkpoint]: Unexpected enlarging method.")
@@ -183,7 +184,8 @@ class ResNet_FPN(nn.HybridBlock):
                     [{"channel": 256, "kernel_size": 1, "stride": 1, "padding": 0},
                      {"channel": 512, "kernel_size": 1, "stride": 2, "padding": 0}]
             },
-            IF_DENSE=False
+            IF_DENSE=False,
+            IF_HEAD=True
         )
         self.feature_blk_1 = res50h.ResNet50(
             params={"channels": [[[256, 256, 1024]] * 6],
@@ -191,14 +193,18 @@ class ResNet_FPN(nn.HybridBlock):
                     "branches":
                         [{"channel": 1024, "kernel_size": 1, "stride": 2, "padding": 0}]
                     },
-            IF_DENSE=False)
+            IF_DENSE=False,
+            IF_HEAD=False
+        )
         self.feature_blk_2 = res50h.ResNet50(
             params={"channels": [[[512, 512, 2048]] * 3],
                     "kernel_sizes": [[[1, 3, 1]] * 3],
                     "branches":
                         [{"channel": 2048, "kernel_size": 1, "stride": 2, "padding": 0}]
                     },
-            IF_DENSE=False)
+            IF_DENSE=False,
+            IF_HEAD=False
+        )
 
         self.ssd_1 = ssd.LightRetina(num_cls=1, num_ach=num_anchors)
         self.ssd_2 = ssd.LightRetina(num_cls=1, num_ach=num_anchors)
@@ -248,11 +254,14 @@ def test():
     # print(x1.shape)
     #
     # fusionFMaps(x, x1)
-    x = nd.random.normal(0, 1, (1, 100, 256, 256), ctx=mx.gpu())
+    import time
+    x = nd.random.normal(0, 1, (1, 100, 512, 512), ctx=mx.gpu())
     net = ResNet_FPN()
     net.hybridize()
     net.initialize(ctx=mx.gpu())
+    cnt = time.time()
     res = net(x)
+    print(time.time() - cnt)
     net.export("./res_fpn")
     print(res)
 
