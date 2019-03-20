@@ -212,8 +212,8 @@ class ResNet_FPN(nn.HybridBlock):
         self.ssd_2 = ssd.LightRetina(num_cls=1, num_ach=num_anchors)
         self.ssd_3 = ssd.LightRetina(num_cls=1, num_ach=num_anchors)
 
-        self.chan_align_1 = ChannelAdapt(out_channels=1024)
-        self.chan_align_2 = ChannelAdapt(out_channels=512)
+        self.chan_align_32 = ChannelAdapt(out_channels=1024)
+        self.chan_align_21 = ChannelAdapt(out_channels=512)
 
     def hybrid_forward(self, F, x):
         x = self.BaseBlk(x)
@@ -222,9 +222,9 @@ class ResNet_FPN(nn.HybridBlock):
         fmap_3 = self.feature_blk_2(fmap_2)
 
         fusion_33 = fmap_3  # placeholder. to be deleted in the future
-        fusion_32 = hybrid_fusionFMaps(fmap_2, fusion_33,
+        fusion_32 = hybrid_fusionFMaps(fmap_2, self.chan_align_32(fusion_33),
                                        neighbor_scale=4, method='bilinear')
-        fusion_21 = hybrid_fusionFMaps(fmap_1, fusion_32,
+        fusion_21 = hybrid_fusionFMaps(fmap_1, self.chan_align_21(fusion_32),
                                        neighbor_scale=4, method='bilinear')
 
         anchors, cls_preds, bbox_preds = [None] * 3, [None] * 3, [None] * 3
