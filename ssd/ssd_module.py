@@ -114,11 +114,11 @@ class LightRetina(nn.HybridBlock):
         if not self._IF_TINY:
             self.BaseBlk = BaseNetwork(False)
         self.blk1 = nn.HybridSequential()
-        self.blk1.add(nn.Conv2D(channels=128, kernel_size=3, strides=1, padding=1),
-                      nn.Conv2D(channels=128, kernel_size=3, strides=1, padding=1),
-                      nn.Conv2D(channels=128, kernel_size=3, strides=1, padding=1),
-                      nn.Conv2D(channels=128, kernel_size=3, strides=1, padding=1),
-                      nn.BatchNorm(in_channels=128),
+        self.blk1.add(nn.Conv2D(channels=512, kernel_size=3, strides=1, padding=1),
+                      nn.Conv2D(channels=512, kernel_size=1, strides=1, padding=0),
+                      nn.Conv2D(channels=512, kernel_size=3, strides=1, padding=1),
+                      nn.Conv2D(channels=512, kernel_size=1, strides=1, padding=0),
+                      nn.BatchNorm(in_channels=512),
                       nn.Activation('relu'))
 
         self.cls1 = genClsPredictor(num_cls, num_ach)
