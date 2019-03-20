@@ -57,7 +57,7 @@ def fusionFMaps(lMap, sMap, upconv_ksize=3, method='upconv'):
     return res
 
 
-def hybrid_fusionFMaps(lMap, sMap, out_channels=1024, method='upconv'):
+def hybrid_fusionFMaps(lMap, sMap, neighbor_scale=2, method='upconv'):
     # lMap/sMap stand for large/small feature maps
     # methods: 'upconv', 'lin_interpol'
 
@@ -71,7 +71,7 @@ def hybrid_fusionFMaps(lMap, sMap, out_channels=1024, method='upconv'):
         # TODO: Modify this. Figure out a way to deal with size problem brought by pooling
         upconv_sMap = sym.UpSampling(sMap, scale=2, sample_type="nearest")
     elif method == 'bilinear':
-        upconv_sMap = sym.UpSampling(sMap, scale=2, sample_type="nearest")
+        upconv_sMap = sym.UpSampling(sMap, scale=neighbor_scale, sample_type="nearest")
 
     else:
         raise Exception("ERROR! [jcy checkpoint]: Unexpected enlarging method.")
@@ -148,8 +148,10 @@ class FPN(nn.HybridBlock):
         fmap_3 = self.feature_blk_3(fmap_2)
 
         fusion_33 = fmap_3  # placeholder. to be deleted in the future
-        fusion_32 = hybrid_fusionFMaps(fmap_2, fusion_33, method='bilinear')
-        fusion_21 = hybrid_fusionFMaps(fmap_1, fusion_32, method='bilinear')
+        fusion_32 = hybrid_fusionFMaps(fmap_2, fusion_33,
+                                       neighbor_scale=4, method='bilinear')
+        fusion_21 = hybrid_fusionFMaps(fmap_1, fusion_32,
+                                       neighbor_scale=4, method='bilinear')
 
         anchors, cls_preds, bbox_preds = [None] * 3, [None] * 3, [None] * 3
         anchors[2], cls_preds[2], bbox_preds[2] = self.ssd_3(fusion_33)
@@ -194,7 +196,7 @@ class ResNet_FPN(nn.HybridBlock):
                         [{"channel": 1024, "kernel_size": 1, "stride": 2, "padding": 0}]
                     },
             IF_DENSE=False,
-            IF_HEAD=False
+            IF_HEAD=True
         )
         self.feature_blk_2 = res50h.ResNet50(
             params={"channels": [[[512, 512, 2048]] * 3],
@@ -203,7 +205,7 @@ class ResNet_FPN(nn.HybridBlock):
                         [{"channel": 2048, "kernel_size": 1, "stride": 2, "padding": 0}]
                     },
             IF_DENSE=False,
-            IF_HEAD=False
+            IF_HEAD=True
         )
 
         self.ssd_1 = ssd.LightRetina(num_cls=1, num_ach=num_anchors)

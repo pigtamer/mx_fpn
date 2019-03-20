@@ -14,9 +14,12 @@ parser.add_argument("-l", "--load", dest="load",
 parser.add_argument("-b", "--base", dest="base",
                     help="bool: using additional base network",
                     type=int, default=0)
+parser.add_argument("-e", "--epoches", dest="num_epoches",
+                    help="int: trainig epoches",
+                    type=int, default=10)
 parser.add_argument("-bs", "--batch_size", dest="batch_size",
                     help="int: batch size for training",
-                    type=int, default=0)
+                    type=int, default=4)
 parser.add_argument("-s", "--imsize", dest="input_size",
                     help="int: input size",
                     type=int, default=448)
@@ -75,7 +78,7 @@ if IF_LOAD_MODEL:
     net = nn.SymbolBlock.imports("FPN-symbol.json", ['data'], "FPN-0000.params", ctx=ctx)
 
 else:
-    for epoch in range(20):
+    for epoch in range(args.num_epoches):
         acc_sum, mae_sum, n, m = 0.0, 0.0, 0, 0
         train_iter.reset()  # reset data iterator to read-in images from beginning
         start = time.time()
