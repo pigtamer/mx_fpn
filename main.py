@@ -102,12 +102,11 @@ else:
             n += cls_labels.size
             mae_sum += bbox_eval(bbox_preds, bbox_labels, bbox_masks)
             m += bbox_labels.size
-            print('epoch %2d, class err %.2e, bbox mae %.2e, time %.1f sec' % (
-                epoch + 1, 1 - acc_sum / n, mae_sum / m, time.time() - start))
-
-            # Checkpoint
-            if (epoch + 1) % 5 == 0:
-                net.export('FPN')
+        print('epoch %2d, class err %.2e, bbox mae %.2e, time %.1f sec' % (
+            epoch + 1, 1 - acc_sum / n, mae_sum / m, time.time() - start))
+        # Checkpoint
+        if (epoch + 1) % 5 == 0:
+            net.export('FPN')
 
 
 # img = image.imread(args.test_path)
