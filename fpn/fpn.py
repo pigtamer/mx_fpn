@@ -222,10 +222,10 @@ class ResNet_FPN(nn.HybridBlock):
         fmap_3 = self.feature_blk_2(fmap_2)
 
         fusion_33 = fmap_3  # placeholder. to be deleted in the future
-        fusion_32 = hybrid_fusionFMaps(fmap_2,
-                                       self.chan_align_1(fusion_33), method='bilinear')
-        fusion_21 = hybrid_fusionFMaps(fmap_1,
-                                       self.chan_align_2(fusion_32), method='bilinear')
+        fusion_32 = hybrid_fusionFMaps(fmap_2, fusion_33,
+                                       neighbor_scale=4, method='bilinear')
+        fusion_21 = hybrid_fusionFMaps(fmap_1, fusion_32,
+                                       neighbor_scale=4, method='bilinear')
 
         anchors, cls_preds, bbox_preds = [None] * 3, [None] * 3, [None] * 3
         anchors[2], cls_preds[2], bbox_preds[2] = self.ssd_3(fusion_33)
