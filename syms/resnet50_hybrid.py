@@ -111,7 +111,7 @@ class ResidualLayer(nn.HybridBlock):
 
 
 class ResNet50(nn.HybridBlock):
-    def __init__(self, params, IF_DENSE=True, **kwargs):
+    def __init__(self, params, IF_HEAD=True, IF_DENSE=True, **kwargs):
         """
         This is builder for a hybrid resnet-50 network
         :param params: parameters for resnet-50 network.
@@ -125,14 +125,15 @@ class ResNet50(nn.HybridBlock):
         branches = params["branches"]
         assert len(chans) == len(kernel_sizes) & len(kernel_sizes) == len(branches)
         self.net = nn.HybridSequential()
-        conv1 = nn.HybridSequential()
-        conv1.add(
-            nn.Conv2D(channels=64, kernel_size=7,
-                      strides=2, padding=int(7 / 2)),
-            nn.Activation(activation='relu'),
-            nn.BatchNorm(in_channels=64)
-        )
-        self.net.add(conv1)
+        if IF_HEAD:
+            conv1 = nn.HybridSequential()
+            conv1.add(
+                nn.Conv2D(channels=64, kernel_size=7,
+                          strides=2, padding=int(7 / 2)),
+                nn.Activation(activation='relu'),
+                nn.BatchNorm(in_channels=64)
+            )
+            self.net.add(conv1)
         for k in range(len(chans)):
             self.net.add(
                 ResidualLayer(len(chans[k]), chans[k], kernel_sizes[k], branches[k])

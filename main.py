@@ -14,23 +14,26 @@ parser.add_argument("-l", "--load", dest="load",
 parser.add_argument("-b", "--base", dest="base",
                     help="bool: using additional base network",
                     type=int, default=0)
+parser.add_argument("-bs", "--batch_size", dest="batch_size",
+                    help="int: batch size for training",
+                    type=int, default=0)
 parser.add_argument("-s", "--imsize", dest="input_size",
                     help="int: input size",
                     type=int, default=448)
 parser.add_argument("-m", "--model_path", dest="model_path",
                     help="str: the path to load and save model",
-                    type=str, default="./myfpn.params")
+                    type=str, default="./FPN-0000.params")
 parser.add_argument("-t", "--test_path", dest="test_path",
                     help="str: the path to your test img",
                     type=str, default="../data/uav/drone_video/Video_233.mp4")
 args = parser.parse_args()
 
 ctx = mx.gpu()
-net = fpn.FPN(num_layers=3)
+net = fpn.ResNet_FPN(num_layers=3)
 net.initialize(init="Xavier", ctx=ctx)
 net.hybridize()
 
-batch_size, edge_size = 1, args.input_size
+batch_size, edge_size = args.batch_size, args.input_size
 # train_iter, _ = predata.load_data_pikachu(batch_size, edge_size)
 train_iter, _ = predata.load_data_uav(batch_size, edge_size)
 batch = train_iter.next()
@@ -69,10 +72,10 @@ def bbox_eval(bbox_preds, bbox_labels, bbox_masks):
 IF_LOAD_MODEL = args.load
 if IF_LOAD_MODEL:
     # net.load_parameters(args.model_path) # for save_parameters
-    net = nn.SymbolBlock.imports("FPN-symbol.json", ['data'], "myfpn.params", ctx=ctx)
+    net = nn.SymbolBlock.imports("FPN-symbol.json", ['data'], "FPN-0000.params", ctx=ctx)
 
 else:
-    for epoch in range(5):
+    for epoch in range(20):
         acc_sum, mae_sum, n, m = 0.0, 0.0, 0, 0
         train_iter.reset()  # reset data iterator to read-in images from beginning
         start = time.time()
@@ -83,7 +86,6 @@ else:
                 # generate anchors and generate bboxes
                 anchors, cls_preds, bbox_preds = net(X)
                 print(net)
-                net.export('FPN')
 
                 # assign classes and bboxes for each anchor
                 bbox_labels, bbox_masks, cls_labels = nd.contrib.MultiBoxTarget(anchors, Y,
@@ -103,6 +105,7 @@ else:
                 epoch + 1, 1 - acc_sum / n, mae_sum / m, time.time() - start))
     net.export('FPN')
 
+
 # img = image.imread(args.test_path)
 # feature = image.imresize(img, args.input_size, args.input_size).astype('float32')
 # X = feature.transpose((2, 0, 1)).expand_dims(axis=0)
@@ -113,8 +116,8 @@ def predict(X):
     cls_probs = cls_preds.softmax().transpose((0, 2, 1))
     output = nd.contrib.MultiBoxDetection(cls_probs, bbox_preds, anchors)
     idx = [i for i, row in enumerate(output[0]) if row[0].asscalar() != -1]
-    if idx == []:
-        raise ValueError("NO TARGET. Seq Terminated.")
+    if idx == []: return nd.array([[0, 0, 0, 0, 0, 0, 0]])
+    # raise ValueError("NO TARGET. Seq Terminated.")
     return output[0, idx]
 
 
@@ -144,7 +147,7 @@ while True:
 
     countt = time.time()
     output = predict(X)
-    if rd == 0: net.export('ssd')
+    # if rd == 0: net.export('ssd')
     countt = time.time() - countt
     print("SPF: %3.2f" % countt)
 
@@ -153,4 +156,3 @@ while True:
     display(frame / 255, output, threshold=0.8)
     plt.show()
     rd += 1
-
