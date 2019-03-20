@@ -85,7 +85,7 @@ else:
             with autograd.record():
                 # generate anchors and generate bboxes
                 anchors, cls_preds, bbox_preds = net(X)
-                print(net)
+                #print(net)
 
                 # assign classes and bboxes for each anchor
                 bbox_labels, bbox_masks, cls_labels = nd.contrib.MultiBoxTarget(anchors, Y,
@@ -99,11 +99,12 @@ else:
             n += cls_labels.size
             mae_sum += bbox_eval(bbox_preds, bbox_labels, bbox_masks)
             m += bbox_labels.size
-
-        if (epoch + 1) % 1 == 0:
             print('epoch %2d, class err %.2e, bbox mae %.2e, time %.1f sec' % (
                 epoch + 1, 1 - acc_sum / n, mae_sum / m, time.time() - start))
-    net.export('FPN')
+
+            # Checkpoint
+            if (epoch + 1) % 5 == 0:
+                net.export('FPN')
 
 
 # img = image.imread(args.test_path)
