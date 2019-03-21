@@ -87,7 +87,7 @@ else:
             net.export('FPN')
             val_recorder[epoch], _, _ = validate(val_iter, net, ctx)
 
-    print(val_recorder)
+            print(val_recorder)
     plt.figure()
     plt.plot(val_recorder)
     plt.title("validating curve"); plt.show()
