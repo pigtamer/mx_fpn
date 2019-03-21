@@ -19,7 +19,7 @@ def training(data_iter, num_epoches, cls_lossfunc, bbox_lossfunc):
 
 
 def validate(val_iter, net, ctx=mx.gpu()):
-    acc_cls,acc_bbox, acc_l, n,m = 0, 0,0,0,0
+    acc_cls, acc_bbox, acc_l, n, m = 0, 0, 0, 0, 0
     for batch in val_iter:
         X = batch.data[0].as_in_context(ctx)
         Y = batch.label[0].as_in_context(ctx)
@@ -36,7 +36,12 @@ def validate(val_iter, net, ctx=mx.gpu()):
         m += bbox_labels.size
         acc_bbox += bbox_eval(bbox_preds, bbox_labels, bbox_masks)
         acc_l += nd.sum(l)
-
-    acc_cls = 1 - acc_cls / n
-    acc_bbox /= m
+    if n != 0:
+        acc_cls = 1 - acc_cls / n
+    else:
+        acc_cls = 1
+    if m != 0:
+        acc_bbox /= m;
+    else:
+        acc_bbox = 1;
     return (acc_l, acc_cls, acc_bbox)
