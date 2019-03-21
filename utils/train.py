@@ -20,6 +20,7 @@ def training(data_iter, num_epoches, cls_lossfunc, bbox_lossfunc):
 
 def validate(val_iter, net, ctx=mx.gpu()):
     acc_cls, acc_bbox, acc_l, n, m = 0, 0, 0, 0, 0
+    val_iter.reset()
     for batch in val_iter:
         X = batch.data[0].as_in_context(ctx)
         Y = batch.label[0].as_in_context(ctx)
