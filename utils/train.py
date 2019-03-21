@@ -33,5 +33,5 @@ def validate(val_iter, net, ctx=mx.gpu()):
                       bbox_preds, bbox_labels, bbox_masks)
         acc_cls += cls_eval(cls_preds, cls_labels)
         acc_bbox += bbox_eval(bbox_preds, bbox_labels, bbox_masks)
-        acc_l += l
-    return (l, acc_cls, acc_bbox)
+        acc_l += nd.sum(l)
+    return (acc_l, acc_cls, acc_bbox)

@@ -85,7 +85,7 @@ else:
         # Checkpoint
         if (epoch + 1) % 5 == 0:
             net.export('FPN')
-            val_recorder[epoch], _, _ = validate(val_iter, net, ctx)
+            _, val_recorder[epoch], _ = validate(val_iter, net, ctx)
 
             print(val_recorder)
     plt.figure()
