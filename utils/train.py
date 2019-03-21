@@ -31,6 +31,6 @@ def validate(val_iter, net, ctx=mx.gpu()):
         l = calc_loss(cls_lossfunc, bbox_lossfunc, cls_preds, cls_labels,
                       bbox_preds, bbox_labels, bbox_masks)
         acc_cls = cls_eval(cls_preds, cls_labels)
-        acc_bbox = bbox_eval(bbox_preds, bbox_labels)
+        acc_bbox = bbox_eval(bbox_preds, bbox_labels, bbox_masks)
 
     return (l, acc_cls, acc_bbox)
