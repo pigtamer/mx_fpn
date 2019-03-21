@@ -7,6 +7,9 @@ from utils.train import validate
 import matplotlib.pyplot as plt
 import fpn
 import time, argparse
+import mxboard as mxb
+
+sw = mxb.SummaryWriter(logdir='./logs', flush_secs=5)
 
 # parsing cli arguments
 parser = argparse.ArgumentParser()
@@ -53,7 +56,7 @@ IF_LOAD_MODEL = args.load
 if IF_LOAD_MODEL:
     # net.load_parameters(args.model_path) # for save_parameters
     net = nn.SymbolBlock.imports("FPN-symbol.json", ['data'], "FPN-0000.params", ctx=ctx)
-
+    sw.add_graph(net)
 else:
     val_recorder = [None]*int(args.num_epoches / 5)
     for epoch in range(args.num_epoches):
@@ -154,7 +157,7 @@ rd = 0
 while True:
     ret, frame = cap.read()
     img = nd.array(frame)
-    feature = image.imresize(img, 512, 512).astype('float32')
+    feature = image.imresize(img, 256, 256).astype('float32')
     X = feature.transpose((2, 0, 1)).expand_dims(axis=0)
 
     countt = time.time()
