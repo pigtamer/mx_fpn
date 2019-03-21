@@ -129,7 +129,7 @@ class ResNet50(nn.HybridBlock):
             conv1 = nn.HybridSequential()
             conv1.add(
                 nn.Conv2D(channels=64, kernel_size=7,
-                          strides=2, padding=int(7 / 2)),
+                          strides=2, padding=3),
                 nn.Activation(activation='relu'),
                 nn.BatchNorm(in_channels=64)
             )

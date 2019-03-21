@@ -115,11 +115,18 @@ class LightRetina(nn.HybridBlock):
             self.BaseBlk = BaseNetwork(False)
         self.blk1 = nn.HybridSequential()
         self.blk1.add(nn.Conv2D(channels=512, kernel_size=3, strides=1, padding=1),
-                      nn.Conv2D(channels=512, kernel_size=1, strides=1, padding=0),
-                      nn.Conv2D(channels=512, kernel_size=3, strides=1, padding=1),
-                      nn.Conv2D(channels=512, kernel_size=1, strides=1, padding=0),
+                      nn.Activation('relu'),
                       nn.BatchNorm(in_channels=512),
-                      nn.Activation('relu'))
+                      nn.Conv2D(channels=512, kernel_size=1, strides=1, padding=0),
+                      nn.Activation('relu'),
+                      nn.BatchNorm(in_channels=512),
+                      nn.Conv2D(channels=512, kernel_size=3, strides=1, padding=1),
+                      nn.Activation('relu'),
+                      nn.BatchNorm(in_channels=512),
+                      nn.Conv2D(channels=512, kernel_size=1, strides=1, padding=0),
+                      nn.Activation('relu'),
+                      nn.BatchNorm(in_channels=512)
+                      )
 
         self.cls1 = genClsPredictor(num_cls, num_ach)
         self.reg1 = genBBoxRegressor(num_ach)

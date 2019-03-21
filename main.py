@@ -2,6 +2,8 @@ import mxnet as mx, cv2 as cv
 from mxnet.gluon import nn, loss as gloss, data as gdata
 from mxnet import nd, image, autograd
 from utils import utils, predata
+from utils.utils import calc_loss, cls_eval, bbox_eval
+from utils.train import validate
 import matplotlib.pyplot as plt
 import fpn
 import time, argparse
@@ -16,17 +18,17 @@ parser.add_argument("-b", "--base", dest="base",
                     type=int, default=0)
 parser.add_argument("-e", "--epoches", dest="num_epoches",
                     help="int: trainig epoches",
-                    type=int, default=10)
+                    type=int, default=20)
 parser.add_argument("-bs", "--batch_size", dest="batch_size",
                     help="int: batch size for training",
                     type=int, default=4)
-parser.add_argument("-s", "--imsize", dest="input_size",
+parser.add_argument("-is", "--imsize", dest="input_size",
                     help="int: input size",
-                    type=int, default=448)
-parser.add_argument("-m", "--model_path", dest="model_path",
+                    type=int, default=256)
+parser.add_argument("-mp", "--model_path", dest="model_path",
                     help="str: the path to load and save model",
                     type=str, default="./FPN-0000.params")
-parser.add_argument("-t", "--test_path", dest="test_path",
+parser.add_argument("-tp", "--test_path", dest="test_path",
                     help="str: the path to your test img",
                     type=str, default="../data/uav/drone_video/Video_233.mp4")
 args = parser.parse_args()
@@ -38,16 +40,8 @@ net.hybridize()
 
 batch_size, edge_size = args.batch_size, args.input_size
 # train_iter, _ = predata.load_data_pikachu(batch_size, edge_size)
-train_iter, _ = predata.load_data_uav(batch_size, edge_size)
+train_iter, val_iter = predata.load_data_uav(batch_size, edge_size)
 batch = train_iter.next()
-
-if batch_size == 25:  # show fucking pikachuus in grid
-    imgs = (batch.data[0][0:25].transpose((0, 2, 3, 1))) / 255
-    axes = utils.show_images(imgs, 5, 5).flatten()
-    for ax, label in zip(axes, batch.label[0][0:25]):
-        utils.show_bboxes(ax, [label[0][1:5] * edge_size], colors=['w'])
-
-    plt.show()
 
 # net.initialize(init=init.Xavier(), ctx=ctx)
 trainer = mx.gluon.Trainer(net.collect_params(), 'sgd',
@@ -55,29 +49,13 @@ trainer = mx.gluon.Trainer(net.collect_params(), 'sgd',
 cls_loss = gloss.SoftmaxCrossEntropyLoss()
 bbox_loss = gloss.L1Loss()
 
-
-def calc_loss(cls_preds, cls_labels, bbox_preds, bbox_labels, bbox_masks):
-    cls = cls_loss(cls_preds, cls_labels)
-    bbox = bbox_loss(bbox_preds * bbox_masks, bbox_labels * bbox_masks)
-    return cls + bbox
-
-
-def cls_eval(cls_preds, cls_labels):
-    # the result from class prediction is at the last dim
-    # argmax() should be assigned with the last dim of cls_preds
-    return (cls_preds.argmax(axis=-1) == cls_labels).sum().asscalar()
-
-
-def bbox_eval(bbox_preds, bbox_labels, bbox_masks):
-    return ((bbox_labels - bbox_preds) * bbox_masks).abs().sum().asscalar()
-
-
 IF_LOAD_MODEL = args.load
 if IF_LOAD_MODEL:
     # net.load_parameters(args.model_path) # for save_parameters
     net = nn.SymbolBlock.imports("FPN-symbol.json", ['data'], "FPN-0000.params", ctx=ctx)
 
 else:
+    val_recorder = [None]*int(args.num_epoches / 5)
     for epoch in range(args.num_epoches):
         acc_sum, mae_sum, n, m = 0.0, 0.0, 0, 0
         train_iter.reset()  # reset data iterator to read-in images from beginning
@@ -88,14 +66,14 @@ else:
             with autograd.record():
                 # generate anchors and generate bboxes
                 anchors, cls_preds, bbox_preds = net(X)
-                #print(net)
+                # print(net)
 
                 # assign classes and bboxes for each anchor
                 bbox_labels, bbox_masks, cls_labels = nd.contrib.MultiBoxTarget(anchors, Y,
                                                                                 cls_preds.transpose((0, 2, 1)))
                 # calc loss
-                l = calc_loss(cls_preds, cls_labels, bbox_preds, bbox_labels,
-                              bbox_masks)
+                l = calc_loss(cls_loss, bbox_loss, cls_preds, cls_labels,
+                              bbox_preds, bbox_labels, bbox_masks)
             l.backward()
             trainer.step(batch_size)
             acc_sum += cls_eval(cls_preds, cls_labels)
@@ -107,11 +85,12 @@ else:
         # Checkpoint
         if (epoch + 1) % 5 == 0:
             net.export('FPN')
+            val_recorder[epoch], _, _ = validate(val_iter, net, ctx)
 
-
-# img = image.imread(args.test_path)
-# feature = image.imresize(img, args.input_size, args.input_size).astype('float32')
-# X = feature.transpose((2, 0, 1)).expand_dims(axis=0)
+    print(val_recorder)
+    plt.figure()
+    plt.plot(val_recorder)
+    plt.title("validating curve"); plt.show()
 
 
 def predict(X):
@@ -124,20 +103,24 @@ def predict(X):
     return output[0, idx]
 
 
-def display(img, output, threshold):
+def display(img, output, frame_idx=0, threshold=0):
     lscore = []
     for row in output:
         lscore.append(row[1].asscalar())
     for row in output:
         score = row[1].asscalar()
-        if score < min(max(lscore), threshold):
+        if score < threshold:
             continue
         h, w = img.shape[0:2]
         bbox = [row[2:6] * nd.array((w, h, w, h), ctx=row.context)]
         cv.rectangle(img, (bbox[0][0].asscalar(), bbox[0][1].asscalar()),
-                     (bbox[0][2].asscalar(), bbox[0][3].asscalar()), (0, 255, 0), 3)
+                     (bbox[0][2].asscalar(), bbox[0][3].asscalar()), (1. * (1 - score), 1. * score, 1. * (1 - score)),
+                     int(10 * score))
+        if score == max(lscore):
+            cv.putText(img, "f%s:%3.2f" % (frame_idx, score), org=(bbox[0][0].asscalar(), bbox[0][1].asscalar()),
+                       fontFace=cv.FONT_HERSHEY_SIMPLEX, fontScale=0.5, color=(0, 255, 0))
         cv.imshow("res", img)
-        cv.waitKey(60)
+    cv.waitKey(10)
 
 
 cap = cv.VideoCapture(args.test_path)
@@ -145,17 +128,15 @@ rd = 0
 while True:
     ret, frame = cap.read()
     img = nd.array(frame)
-    feature = image.imresize(img, 256, 256).astype('float32')
+    feature = image.imresize(img, 512, 512).astype('float32')
     X = feature.transpose((2, 0, 1)).expand_dims(axis=0)
 
     countt = time.time()
     output = predict(X)
     # if rd == 0: net.export('ssd')
     countt = time.time() - countt
-    print("SPF: %3.2f" % countt)
+    print("# %d     SPF: %3.2f" % (rd, countt))
 
-    utils.set_figsize((5, 5))
-
-    display(frame / 255, output, threshold=0.8)
+    display(frame / 255, output, frame_idx=rd, threshold=0)
     plt.show()
     rd += 1
