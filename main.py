@@ -28,6 +28,9 @@ parser.add_argument("-bs", "--batch_size", dest="batch_size",
 parser.add_argument("-is", "--imsize", dest="input_size",
                     help="int: input size",
                     type=int, default=256)
+parser.add_argument("-dp", "--data_path", dest="data_path",
+                    help="str: the path to dataset",
+                    type=str, default="../data/uav")
 parser.add_argument("-mp", "--model_path", dest="model_path",
                     help="str: the path to load and save model",
                     type=str, default="./FPN-0000.params")
@@ -42,8 +45,7 @@ net.initialize(init="Xavier", ctx=ctx)
 net.hybridize()
 
 batch_size, edge_size = args.batch_size, args.input_size
-# train_iter, _ = predata.load_data_pikachu(batch_size, edge_size)
-train_iter, val_iter = predata.load_data_uav(batch_size, edge_size)
+train_iter, val_iter = predata.load_data_uav(args.data_path, batch_size, edge_size)
 batch = train_iter.next()
 
 # net.initialize(init=init.Xavier(), ctx=ctx)

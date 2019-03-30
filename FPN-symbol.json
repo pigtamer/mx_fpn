@@ -7593,7 +7593,7 @@
     }, 
     {
       "op": "null", 
-      "name": "batchnorm70_gamma", 
+      "name": "batchnorm79_gamma", 
       "attrs": {
         "__dtype__": "0", 
         "__init__": "ones", 
@@ -7606,7 +7606,7 @@
     }, 
     {
       "op": "null", 
-      "name": "batchnorm70_beta", 
+      "name": "batchnorm79_beta", 
       "attrs": {
         "__dtype__": "0", 
         "__init__": "zeros", 
@@ -7619,7 +7619,7 @@
     }, 
     {
       "op": "null", 
-      "name": "batchnorm70_running_mean", 
+      "name": "batchnorm79_running_mean", 
       "attrs": {
         "__dtype__": "0", 
         "__init__": "zeros", 
@@ -7632,7 +7632,7 @@
     }, 
     {
       "op": "null", 
-      "name": "batchnorm70_running_var", 
+      "name": "batchnorm79_running_var", 
       "attrs": {
         "__dtype__": "0", 
         "__init__": "ones", 
@@ -7645,7 +7645,7 @@
     }, 
     {
       "op": "BatchNorm", 
-      "name": "batchnorm70_fwd", 
+      "name": "batchnorm79_fwd", 
       "attrs": {
         "axis": "1", 
         "eps": "1e-05", 
@@ -7657,7 +7657,7 @@
     }, 
     {
       "op": "Activation", 
-      "name": "relu86_fwd", 
+      "name": "relu95_fwd", 
       "attrs": {"act_type": "relu"}, 
       "inputs": [[643, 0, 0]]
     }, 
@@ -7724,7 +7724,7 @@
     }, 
     {
       "op": "null", 
-      "name": "batchnorm71_gamma", 
+      "name": "batchnorm80_gamma", 
       "attrs": {
         "__dtype__": "0", 
         "__init__": "ones", 
@@ -7737,7 +7737,7 @@
     }, 
     {
       "op": "null", 
-      "name": "batchnorm71_beta", 
+      "name": "batchnorm80_beta", 
       "attrs": {
         "__dtype__": "0", 
         "__init__": "zeros", 
@@ -7750,7 +7750,7 @@
     }, 
     {
       "op": "null", 
-      "name": "batchnorm71_running_mean", 
+      "name": "batchnorm80_running_mean", 
       "attrs": {
         "__dtype__": "0", 
         "__init__": "zeros", 
@@ -7763,7 +7763,7 @@
     }, 
     {
       "op": "null", 
-      "name": "batchnorm71_running_var", 
+      "name": "batchnorm80_running_var", 
       "attrs": {
         "__dtype__": "0", 
         "__init__": "ones", 
@@ -7776,7 +7776,7 @@
     }, 
     {
       "op": "BatchNorm", 
-      "name": "batchnorm71_fwd", 
+      "name": "batchnorm80_fwd", 
       "attrs": {
         "axis": "1", 
         "eps": "1e-05", 
@@ -7788,7 +7788,7 @@
     }, 
     {
       "op": "Activation", 
-      "name": "relu87_fwd", 
+      "name": "relu96_fwd", 
       "attrs": {"act_type": "relu"}, 
       "inputs": [[655, 0, 0]]
     }, 
@@ -7854,124 +7854,10 @@
       "inputs": [[659, 0, 0], [660, 0, 0], [661, 0, 0]]
     }, 
     {
-      "op": "null", 
-      "name": "conv68_weight", 
-      "attrs": {
-        "__dtype__": "0", 
-        "__lr_mult__": "1.0", 
-        "__shape__": "(512, 0, 1, 1)", 
-        "__storage_type__": "0", 
-        "__wd_mult__": "1.0"
-      }, 
-      "inputs": []
-    }, 
-    {
-      "op": "null", 
-      "name": "conv68_bias", 
-      "attrs": {
-        "__dtype__": "0", 
-        "__init__": "zeros", 
-        "__lr_mult__": "1.0", 
-        "__shape__": "(512,)", 
-        "__storage_type__": "0", 
-        "__wd_mult__": "1.0"
-      }, 
-      "inputs": []
-    }, 
-    {
-      "op": "Convolution", 
-      "name": "conv68_fwd", 
-      "attrs": {
-        "dilate": "(1, 1)", 
-        "kernel": "(1, 1)", 
-        "layout": "NCHW", 
-        "no_bias": "False", 
-        "num_filter": "512", 
-        "num_group": "1", 
-        "pad": "(0, 0)", 
-        "stride": "(1, 1)"
-      }, 
-      "inputs": [[662, 0, 0], [663, 0, 0], [664, 0, 0]]
-    }, 
-    {
-      "op": "null", 
-      "name": "conv69_weight", 
-      "attrs": {
-        "__dtype__": "0", 
-        "__lr_mult__": "1.0", 
-        "__shape__": "(512, 0, 3, 3)", 
-        "__storage_type__": "0", 
-        "__wd_mult__": "1.0"
-      }, 
-      "inputs": []
-    }, 
-    {
-      "op": "null", 
-      "name": "conv69_bias", 
-      "attrs": {
-        "__dtype__": "0", 
-        "__init__": "zeros", 
-        "__lr_mult__": "1.0", 
-        "__shape__": "(512,)", 
-        "__storage_type__": "0", 
-        "__wd_mult__": "1.0"
-      }, 
-      "inputs": []
-    }, 
-    {
-      "op": "Convolution", 
-      "name": "conv69_fwd", 
-      "attrs": {
-        "dilate": "(1, 1)", 
-        "kernel": "(3, 3)", 
-        "layout": "NCHW", 
-        "no_bias": "False", 
-        "num_filter": "512", 
-        "num_group": "1", 
-        "pad": "(1, 1)", 
-        "stride": "(1, 1)"
-      }, 
-      "inputs": [[665, 0, 0], [666, 0, 0], [667, 0, 0]]
-    }, 
-    {
-      "op": "null", 
-      "name": "conv70_weight", 
-      "attrs": {
-        "__dtype__": "0", 
-        "__lr_mult__": "1.0", 
-        "__shape__": "(512, 0, 1, 1)", 
-        "__storage_type__": "0", 
-        "__wd_mult__": "1.0"
-      }, 
-      "inputs": []
-    }, 
-    {
-      "op": "null", 
-      "name": "conv70_bias", 
-      "attrs": {
-        "__dtype__": "0", 
-        "__init__": "zeros", 
-        "__lr_mult__": "1.0", 
-        "__shape__": "(512,)", 
-        "__storage_type__": "0", 
-        "__wd_mult__": "1.0"
-      }, 
-      "inputs": []
-    }, 
-    {
-      "op": "Convolution", 
-      "name": "conv70_fwd", 
-      "attrs": {
-        "dilate": "(1, 1)", 
-        "kernel": "(1, 1)", 
-        "layout": "NCHW", 
-        "no_bias": "False", 
-        "num_filter": "512", 
-        "num_group": "1", 
-        "pad": "(0, 0)", 
-        "stride": "(1, 1)"
-      }, 
-      "inputs": [[668, 0, 0], [669, 0, 0], [670, 0, 0]]
+      "op": "Activation", 
+      "name": "relu83_fwd", 
+      "attrs": {"act_type": "relu"}, 
+      "inputs": [[662, 0, 0]]
     }, 
     {
       "op": "null", 
@@ -8035,191 +7921,53 @@
         "momentum": "0.9", 
         "use_global_stats": "False"
       }, 
-      "inputs": [[671, 0, 0], [672, 0, 0], [673, 0, 0], [674, 0, 1], [675, 0, 1]]
+      "inputs": [[663, 0, 0], [664, 0, 0], [665, 0, 0], [666, 0, 1], [667, 0, 1]]
+    }, 
+    {
+      "op": "null", 
+      "name": "conv68_weight", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512, 0, 1, 1)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "conv68_bias", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "zeros", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "Convolution", 
+      "name": "conv68_fwd", 
+      "attrs": {
+        "dilate": "(1, 1)", 
+        "kernel": "(1, 1)", 
+        "layout": "NCHW", 
+        "no_bias": "False", 
+        "num_filter": "512", 
+        "num_group": "1", 
+        "pad": "(0, 0)", 
+        "stride": "(1, 1)"
+      }, 
+      "inputs": [[668, 0, 0], [669, 0, 0], [670, 0, 0]]
     }, 
     {
       "op": "Activation", 
-      "name": "relu83_fwd", 
+      "name": "relu84_fwd", 
       "attrs": {"act_type": "relu"}, 
-      "inputs": [[676, 0, 0]]
-    }, 
-    {
-      "op": "_contrib_MultiBoxPrior", 
-      "name": "lightretina0_multiboxprior0", 
-      "attrs": {
-        "ratios": "[1, 2, 0.5]", 
-        "sizes": "[0.2, 0.272]"
-      }, 
-      "inputs": [[677, 0, 0]]
-    }, 
-    {
-      "op": "Concat", 
-      "name": "lightretina0_concat0", 
-      "attrs": {
-        "dim": "1", 
-        "num_args": "1"
-      }, 
-      "inputs": [[678, 0, 0]]
-    }, 
-    {
-      "op": "null", 
-      "name": "conv73_weight", 
-      "attrs": {
-        "__dtype__": "0", 
-        "__lr_mult__": "1.0", 
-        "__shape__": "(512, 0, 3, 3)", 
-        "__storage_type__": "0", 
-        "__wd_mult__": "1.0"
-      }, 
-      "inputs": []
-    }, 
-    {
-      "op": "null", 
-      "name": "conv73_bias", 
-      "attrs": {
-        "__dtype__": "0", 
-        "__init__": "zeros", 
-        "__lr_mult__": "1.0", 
-        "__shape__": "(512,)", 
-        "__storage_type__": "0", 
-        "__wd_mult__": "1.0"
-      }, 
-      "inputs": []
-    }, 
-    {
-      "op": "Convolution", 
-      "name": "conv73_fwd", 
-      "attrs": {
-        "dilate": "(1, 1)", 
-        "kernel": "(3, 3)", 
-        "layout": "NCHW", 
-        "no_bias": "False", 
-        "num_filter": "512", 
-        "num_group": "1", 
-        "pad": "(1, 1)", 
-        "stride": "(1, 1)"
-      }, 
-      "inputs": [[647, 0, 0], [680, 0, 0], [681, 0, 0]]
-    }, 
-    {
-      "op": "null", 
-      "name": "conv74_weight", 
-      "attrs": {
-        "__dtype__": "0", 
-        "__lr_mult__": "1.0", 
-        "__shape__": "(512, 0, 1, 1)", 
-        "__storage_type__": "0", 
-        "__wd_mult__": "1.0"
-      }, 
-      "inputs": []
-    }, 
-    {
-      "op": "null", 
-      "name": "conv74_bias", 
-      "attrs": {
-        "__dtype__": "0", 
-        "__init__": "zeros", 
-        "__lr_mult__": "1.0", 
-        "__shape__": "(512,)", 
-        "__storage_type__": "0", 
-        "__wd_mult__": "1.0"
-      }, 
-      "inputs": []
-    }, 
-    {
-      "op": "Convolution", 
-      "name": "conv74_fwd", 
-      "attrs": {
-        "dilate": "(1, 1)", 
-        "kernel": "(1, 1)", 
-        "layout": "NCHW", 
-        "no_bias": "False", 
-        "num_filter": "512", 
-        "num_group": "1", 
-        "pad": "(0, 0)", 
-        "stride": "(1, 1)"
-      }, 
-      "inputs": [[682, 0, 0], [683, 0, 0], [684, 0, 0]]
-    }, 
-    {
-      "op": "null", 
-      "name": "conv75_weight", 
-      "attrs": {
-        "__dtype__": "0", 
-        "__lr_mult__": "1.0", 
-        "__shape__": "(512, 0, 3, 3)", 
-        "__storage_type__": "0", 
-        "__wd_mult__": "1.0"
-      }, 
-      "inputs": []
-    }, 
-    {
-      "op": "null", 
-      "name": "conv75_bias", 
-      "attrs": {
-        "__dtype__": "0", 
-        "__init__": "zeros", 
-        "__lr_mult__": "1.0", 
-        "__shape__": "(512,)", 
-        "__storage_type__": "0", 
-        "__wd_mult__": "1.0"
-      }, 
-      "inputs": []
-    }, 
-    {
-      "op": "Convolution", 
-      "name": "conv75_fwd", 
-      "attrs": {
-        "dilate": "(1, 1)", 
-        "kernel": "(3, 3)", 
-        "layout": "NCHW", 
-        "no_bias": "False", 
-        "num_filter": "512", 
-        "num_group": "1", 
-        "pad": "(1, 1)", 
-        "stride": "(1, 1)"
-      }, 
-      "inputs": [[685, 0, 0], [686, 0, 0], [687, 0, 0]]
-    }, 
-    {
-      "op": "null", 
-      "name": "conv76_weight", 
-      "attrs": {
-        "__dtype__": "0", 
-        "__lr_mult__": "1.0", 
-        "__shape__": "(512, 0, 1, 1)", 
-        "__storage_type__": "0", 
-        "__wd_mult__": "1.0"
-      }, 
-      "inputs": []
-    }, 
-    {
-      "op": "null", 
-      "name": "conv76_bias", 
-      "attrs": {
-        "__dtype__": "0", 
-        "__init__": "zeros", 
-        "__lr_mult__": "1.0", 
-        "__shape__": "(512,)", 
-        "__storage_type__": "0", 
-        "__wd_mult__": "1.0"
-      }, 
-      "inputs": []
-    }, 
-    {
-      "op": "Convolution", 
-      "name": "conv76_fwd", 
-      "attrs": {
-        "dilate": "(1, 1)", 
-        "kernel": "(1, 1)", 
-        "layout": "NCHW", 
-        "no_bias": "False", 
-        "num_filter": "512", 
-        "num_group": "1", 
-        "pad": "(0, 0)", 
-        "stride": "(1, 1)"
-      }, 
-      "inputs": [[688, 0, 0], [689, 0, 0], [690, 0, 0]]
+      "inputs": [[671, 0, 0]]
     }, 
     {
       "op": "null", 
@@ -8283,191 +8031,53 @@
         "momentum": "0.9", 
         "use_global_stats": "False"
       }, 
-      "inputs": [[691, 0, 0], [692, 0, 0], [693, 0, 0], [694, 0, 1], [695, 0, 1]]
+      "inputs": [[672, 0, 0], [673, 0, 0], [674, 0, 0], [675, 0, 1], [676, 0, 1]]
+    }, 
+    {
+      "op": "null", 
+      "name": "conv69_weight", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512, 0, 3, 3)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "conv69_bias", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "zeros", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "Convolution", 
+      "name": "conv69_fwd", 
+      "attrs": {
+        "dilate": "(1, 1)", 
+        "kernel": "(3, 3)", 
+        "layout": "NCHW", 
+        "no_bias": "False", 
+        "num_filter": "512", 
+        "num_group": "1", 
+        "pad": "(1, 1)", 
+        "stride": "(1, 1)"
+      }, 
+      "inputs": [[677, 0, 0], [678, 0, 0], [679, 0, 0]]
     }, 
     {
       "op": "Activation", 
-      "name": "relu84_fwd", 
+      "name": "relu85_fwd", 
       "attrs": {"act_type": "relu"}, 
-      "inputs": [[696, 0, 0]]
-    }, 
-    {
-      "op": "_contrib_MultiBoxPrior", 
-      "name": "lightretina1_multiboxprior0", 
-      "attrs": {
-        "ratios": "[1, 2, 0.5]", 
-        "sizes": "[0.2, 0.272]"
-      }, 
-      "inputs": [[697, 0, 0]]
-    }, 
-    {
-      "op": "Concat", 
-      "name": "lightretina1_concat0", 
-      "attrs": {
-        "dim": "1", 
-        "num_args": "1"
-      }, 
-      "inputs": [[698, 0, 0]]
-    }, 
-    {
-      "op": "null", 
-      "name": "conv79_weight", 
-      "attrs": {
-        "__dtype__": "0", 
-        "__lr_mult__": "1.0", 
-        "__shape__": "(512, 0, 3, 3)", 
-        "__storage_type__": "0", 
-        "__wd_mult__": "1.0"
-      }, 
-      "inputs": []
-    }, 
-    {
-      "op": "null", 
-      "name": "conv79_bias", 
-      "attrs": {
-        "__dtype__": "0", 
-        "__init__": "zeros", 
-        "__lr_mult__": "1.0", 
-        "__shape__": "(512,)", 
-        "__storage_type__": "0", 
-        "__wd_mult__": "1.0"
-      }, 
-      "inputs": []
-    }, 
-    {
-      "op": "Convolution", 
-      "name": "conv79_fwd", 
-      "attrs": {
-        "dilate": "(1, 1)", 
-        "kernel": "(3, 3)", 
-        "layout": "NCHW", 
-        "no_bias": "False", 
-        "num_filter": "512", 
-        "num_group": "1", 
-        "pad": "(1, 1)", 
-        "stride": "(1, 1)"
-      }, 
-      "inputs": [[635, 0, 0], [700, 0, 0], [701, 0, 0]]
-    }, 
-    {
-      "op": "null", 
-      "name": "conv80_weight", 
-      "attrs": {
-        "__dtype__": "0", 
-        "__lr_mult__": "1.0", 
-        "__shape__": "(512, 0, 1, 1)", 
-        "__storage_type__": "0", 
-        "__wd_mult__": "1.0"
-      }, 
-      "inputs": []
-    }, 
-    {
-      "op": "null", 
-      "name": "conv80_bias", 
-      "attrs": {
-        "__dtype__": "0", 
-        "__init__": "zeros", 
-        "__lr_mult__": "1.0", 
-        "__shape__": "(512,)", 
-        "__storage_type__": "0", 
-        "__wd_mult__": "1.0"
-      }, 
-      "inputs": []
-    }, 
-    {
-      "op": "Convolution", 
-      "name": "conv80_fwd", 
-      "attrs": {
-        "dilate": "(1, 1)", 
-        "kernel": "(1, 1)", 
-        "layout": "NCHW", 
-        "no_bias": "False", 
-        "num_filter": "512", 
-        "num_group": "1", 
-        "pad": "(0, 0)", 
-        "stride": "(1, 1)"
-      }, 
-      "inputs": [[702, 0, 0], [703, 0, 0], [704, 0, 0]]
-    }, 
-    {
-      "op": "null", 
-      "name": "conv81_weight", 
-      "attrs": {
-        "__dtype__": "0", 
-        "__lr_mult__": "1.0", 
-        "__shape__": "(512, 0, 3, 3)", 
-        "__storage_type__": "0", 
-        "__wd_mult__": "1.0"
-      }, 
-      "inputs": []
-    }, 
-    {
-      "op": "null", 
-      "name": "conv81_bias", 
-      "attrs": {
-        "__dtype__": "0", 
-        "__init__": "zeros", 
-        "__lr_mult__": "1.0", 
-        "__shape__": "(512,)", 
-        "__storage_type__": "0", 
-        "__wd_mult__": "1.0"
-      }, 
-      "inputs": []
-    }, 
-    {
-      "op": "Convolution", 
-      "name": "conv81_fwd", 
-      "attrs": {
-        "dilate": "(1, 1)", 
-        "kernel": "(3, 3)", 
-        "layout": "NCHW", 
-        "no_bias": "False", 
-        "num_filter": "512", 
-        "num_group": "1", 
-        "pad": "(1, 1)", 
-        "stride": "(1, 1)"
-      }, 
-      "inputs": [[705, 0, 0], [706, 0, 0], [707, 0, 0]]
-    }, 
-    {
-      "op": "null", 
-      "name": "conv82_weight", 
-      "attrs": {
-        "__dtype__": "0", 
-        "__lr_mult__": "1.0", 
-        "__shape__": "(512, 0, 1, 1)", 
-        "__storage_type__": "0", 
-        "__wd_mult__": "1.0"
-      }, 
-      "inputs": []
-    }, 
-    {
-      "op": "null", 
-      "name": "conv82_bias", 
-      "attrs": {
-        "__dtype__": "0", 
-        "__init__": "zeros", 
-        "__lr_mult__": "1.0", 
-        "__shape__": "(512,)", 
-        "__storage_type__": "0", 
-        "__wd_mult__": "1.0"
-      }, 
-      "inputs": []
-    }, 
-    {
-      "op": "Convolution", 
-      "name": "conv82_fwd", 
-      "attrs": {
-        "dilate": "(1, 1)", 
-        "kernel": "(1, 1)", 
-        "layout": "NCHW", 
-        "no_bias": "False", 
-        "num_filter": "512", 
-        "num_group": "1", 
-        "pad": "(0, 0)", 
-        "stride": "(1, 1)"
-      }, 
-      "inputs": [[708, 0, 0], [709, 0, 0], [710, 0, 0]]
+      "inputs": [[680, 0, 0]]
     }, 
     {
       "op": "null", 
@@ -8531,13 +8141,1033 @@
         "momentum": "0.9", 
         "use_global_stats": "False"
       }, 
-      "inputs": [[711, 0, 0], [712, 0, 0], [713, 0, 0], [714, 0, 1], [715, 0, 1]]
+      "inputs": [[681, 0, 0], [682, 0, 0], [683, 0, 0], [684, 0, 1], [685, 0, 1]]
+    }, 
+    {
+      "op": "null", 
+      "name": "conv70_weight", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512, 0, 1, 1)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "conv70_bias", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "zeros", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "Convolution", 
+      "name": "conv70_fwd", 
+      "attrs": {
+        "dilate": "(1, 1)", 
+        "kernel": "(1, 1)", 
+        "layout": "NCHW", 
+        "no_bias": "False", 
+        "num_filter": "512", 
+        "num_group": "1", 
+        "pad": "(0, 0)", 
+        "stride": "(1, 1)"
+      }, 
+      "inputs": [[686, 0, 0], [687, 0, 0], [688, 0, 0]]
     }, 
     {
       "op": "Activation", 
-      "name": "relu85_fwd", 
+      "name": "relu86_fwd", 
       "attrs": {"act_type": "relu"}, 
-      "inputs": [[716, 0, 0]]
+      "inputs": [[689, 0, 0]]
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm70_gamma", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "ones", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm70_beta", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "zeros", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm70_running_mean", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "zeros", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm70_running_var", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "ones", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "BatchNorm", 
+      "name": "batchnorm70_fwd", 
+      "attrs": {
+        "axis": "1", 
+        "eps": "1e-05", 
+        "fix_gamma": "False", 
+        "momentum": "0.9", 
+        "use_global_stats": "False"
+      }, 
+      "inputs": [[690, 0, 0], [691, 0, 0], [692, 0, 0], [693, 0, 1], [694, 0, 1]]
+    }, 
+    {
+      "op": "_contrib_MultiBoxPrior", 
+      "name": "lightretina0_multiboxprior0", 
+      "attrs": {
+        "ratios": "[1, 2, 0.5]", 
+        "sizes": "[0.2, 0.272]"
+      }, 
+      "inputs": [[695, 0, 0]]
+    }, 
+    {
+      "op": "Concat", 
+      "name": "lightretina0_concat0", 
+      "attrs": {
+        "dim": "1", 
+        "num_args": "1"
+      }, 
+      "inputs": [[696, 0, 0]]
+    }, 
+    {
+      "op": "null", 
+      "name": "conv73_weight", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512, 0, 3, 3)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "conv73_bias", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "zeros", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "Convolution", 
+      "name": "conv73_fwd", 
+      "attrs": {
+        "dilate": "(1, 1)", 
+        "kernel": "(3, 3)", 
+        "layout": "NCHW", 
+        "no_bias": "False", 
+        "num_filter": "512", 
+        "num_group": "1", 
+        "pad": "(1, 1)", 
+        "stride": "(1, 1)"
+      }, 
+      "inputs": [[647, 0, 0], [698, 0, 0], [699, 0, 0]]
+    }, 
+    {
+      "op": "Activation", 
+      "name": "relu87_fwd", 
+      "attrs": {"act_type": "relu"}, 
+      "inputs": [[700, 0, 0]]
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm71_gamma", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "ones", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm71_beta", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "zeros", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm71_running_mean", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "zeros", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm71_running_var", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "ones", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "BatchNorm", 
+      "name": "batchnorm71_fwd", 
+      "attrs": {
+        "axis": "1", 
+        "eps": "1e-05", 
+        "fix_gamma": "False", 
+        "momentum": "0.9", 
+        "use_global_stats": "False"
+      }, 
+      "inputs": [[701, 0, 0], [702, 0, 0], [703, 0, 0], [704, 0, 1], [705, 0, 1]]
+    }, 
+    {
+      "op": "null", 
+      "name": "conv74_weight", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512, 0, 1, 1)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "conv74_bias", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "zeros", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "Convolution", 
+      "name": "conv74_fwd", 
+      "attrs": {
+        "dilate": "(1, 1)", 
+        "kernel": "(1, 1)", 
+        "layout": "NCHW", 
+        "no_bias": "False", 
+        "num_filter": "512", 
+        "num_group": "1", 
+        "pad": "(0, 0)", 
+        "stride": "(1, 1)"
+      }, 
+      "inputs": [[706, 0, 0], [707, 0, 0], [708, 0, 0]]
+    }, 
+    {
+      "op": "Activation", 
+      "name": "relu88_fwd", 
+      "attrs": {"act_type": "relu"}, 
+      "inputs": [[709, 0, 0]]
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm72_gamma", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "ones", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm72_beta", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "zeros", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm72_running_mean", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "zeros", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm72_running_var", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "ones", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "BatchNorm", 
+      "name": "batchnorm72_fwd", 
+      "attrs": {
+        "axis": "1", 
+        "eps": "1e-05", 
+        "fix_gamma": "False", 
+        "momentum": "0.9", 
+        "use_global_stats": "False"
+      }, 
+      "inputs": [[710, 0, 0], [711, 0, 0], [712, 0, 0], [713, 0, 1], [714, 0, 1]]
+    }, 
+    {
+      "op": "null", 
+      "name": "conv75_weight", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512, 0, 3, 3)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "conv75_bias", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "zeros", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "Convolution", 
+      "name": "conv75_fwd", 
+      "attrs": {
+        "dilate": "(1, 1)", 
+        "kernel": "(3, 3)", 
+        "layout": "NCHW", 
+        "no_bias": "False", 
+        "num_filter": "512", 
+        "num_group": "1", 
+        "pad": "(1, 1)", 
+        "stride": "(1, 1)"
+      }, 
+      "inputs": [[715, 0, 0], [716, 0, 0], [717, 0, 0]]
+    }, 
+    {
+      "op": "Activation", 
+      "name": "relu89_fwd", 
+      "attrs": {"act_type": "relu"}, 
+      "inputs": [[718, 0, 0]]
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm73_gamma", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "ones", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm73_beta", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "zeros", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm73_running_mean", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "zeros", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm73_running_var", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "ones", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "BatchNorm", 
+      "name": "batchnorm73_fwd", 
+      "attrs": {
+        "axis": "1", 
+        "eps": "1e-05", 
+        "fix_gamma": "False", 
+        "momentum": "0.9", 
+        "use_global_stats": "False"
+      }, 
+      "inputs": [[719, 0, 0], [720, 0, 0], [721, 0, 0], [722, 0, 1], [723, 0, 1]]
+    }, 
+    {
+      "op": "null", 
+      "name": "conv76_weight", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512, 0, 1, 1)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "conv76_bias", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "zeros", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "Convolution", 
+      "name": "conv76_fwd", 
+      "attrs": {
+        "dilate": "(1, 1)", 
+        "kernel": "(1, 1)", 
+        "layout": "NCHW", 
+        "no_bias": "False", 
+        "num_filter": "512", 
+        "num_group": "1", 
+        "pad": "(0, 0)", 
+        "stride": "(1, 1)"
+      }, 
+      "inputs": [[724, 0, 0], [725, 0, 0], [726, 0, 0]]
+    }, 
+    {
+      "op": "Activation", 
+      "name": "relu90_fwd", 
+      "attrs": {"act_type": "relu"}, 
+      "inputs": [[727, 0, 0]]
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm74_gamma", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "ones", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm74_beta", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "zeros", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm74_running_mean", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "zeros", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm74_running_var", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "ones", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "BatchNorm", 
+      "name": "batchnorm74_fwd", 
+      "attrs": {
+        "axis": "1", 
+        "eps": "1e-05", 
+        "fix_gamma": "False", 
+        "momentum": "0.9", 
+        "use_global_stats": "False"
+      }, 
+      "inputs": [[728, 0, 0], [729, 0, 0], [730, 0, 0], [731, 0, 1], [732, 0, 1]]
+    }, 
+    {
+      "op": "_contrib_MultiBoxPrior", 
+      "name": "lightretina1_multiboxprior0", 
+      "attrs": {
+        "ratios": "[1, 2, 0.5]", 
+        "sizes": "[0.2, 0.272]"
+      }, 
+      "inputs": [[733, 0, 0]]
+    }, 
+    {
+      "op": "Concat", 
+      "name": "lightretina1_concat0", 
+      "attrs": {
+        "dim": "1", 
+        "num_args": "1"
+      }, 
+      "inputs": [[734, 0, 0]]
+    }, 
+    {
+      "op": "null", 
+      "name": "conv79_weight", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512, 0, 3, 3)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "conv79_bias", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "zeros", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "Convolution", 
+      "name": "conv79_fwd", 
+      "attrs": {
+        "dilate": "(1, 1)", 
+        "kernel": "(3, 3)", 
+        "layout": "NCHW", 
+        "no_bias": "False", 
+        "num_filter": "512", 
+        "num_group": "1", 
+        "pad": "(1, 1)", 
+        "stride": "(1, 1)"
+      }, 
+      "inputs": [[635, 0, 0], [736, 0, 0], [737, 0, 0]]
+    }, 
+    {
+      "op": "Activation", 
+      "name": "relu91_fwd", 
+      "attrs": {"act_type": "relu"}, 
+      "inputs": [[738, 0, 0]]
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm75_gamma", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "ones", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm75_beta", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "zeros", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm75_running_mean", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "zeros", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm75_running_var", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "ones", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "BatchNorm", 
+      "name": "batchnorm75_fwd", 
+      "attrs": {
+        "axis": "1", 
+        "eps": "1e-05", 
+        "fix_gamma": "False", 
+        "momentum": "0.9", 
+        "use_global_stats": "False"
+      }, 
+      "inputs": [[739, 0, 0], [740, 0, 0], [741, 0, 0], [742, 0, 1], [743, 0, 1]]
+    }, 
+    {
+      "op": "null", 
+      "name": "conv80_weight", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512, 0, 1, 1)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "conv80_bias", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "zeros", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "Convolution", 
+      "name": "conv80_fwd", 
+      "attrs": {
+        "dilate": "(1, 1)", 
+        "kernel": "(1, 1)", 
+        "layout": "NCHW", 
+        "no_bias": "False", 
+        "num_filter": "512", 
+        "num_group": "1", 
+        "pad": "(0, 0)", 
+        "stride": "(1, 1)"
+      }, 
+      "inputs": [[744, 0, 0], [745, 0, 0], [746, 0, 0]]
+    }, 
+    {
+      "op": "Activation", 
+      "name": "relu92_fwd", 
+      "attrs": {"act_type": "relu"}, 
+      "inputs": [[747, 0, 0]]
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm76_gamma", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "ones", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm76_beta", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "zeros", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm76_running_mean", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "zeros", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm76_running_var", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "ones", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "BatchNorm", 
+      "name": "batchnorm76_fwd", 
+      "attrs": {
+        "axis": "1", 
+        "eps": "1e-05", 
+        "fix_gamma": "False", 
+        "momentum": "0.9", 
+        "use_global_stats": "False"
+      }, 
+      "inputs": [[748, 0, 0], [749, 0, 0], [750, 0, 0], [751, 0, 1], [752, 0, 1]]
+    }, 
+    {
+      "op": "null", 
+      "name": "conv81_weight", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512, 0, 3, 3)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "conv81_bias", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "zeros", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "Convolution", 
+      "name": "conv81_fwd", 
+      "attrs": {
+        "dilate": "(1, 1)", 
+        "kernel": "(3, 3)", 
+        "layout": "NCHW", 
+        "no_bias": "False", 
+        "num_filter": "512", 
+        "num_group": "1", 
+        "pad": "(1, 1)", 
+        "stride": "(1, 1)"
+      }, 
+      "inputs": [[753, 0, 0], [754, 0, 0], [755, 0, 0]]
+    }, 
+    {
+      "op": "Activation", 
+      "name": "relu93_fwd", 
+      "attrs": {"act_type": "relu"}, 
+      "inputs": [[756, 0, 0]]
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm77_gamma", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "ones", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm77_beta", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "zeros", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm77_running_mean", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "zeros", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm77_running_var", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "ones", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "BatchNorm", 
+      "name": "batchnorm77_fwd", 
+      "attrs": {
+        "axis": "1", 
+        "eps": "1e-05", 
+        "fix_gamma": "False", 
+        "momentum": "0.9", 
+        "use_global_stats": "False"
+      }, 
+      "inputs": [[757, 0, 0], [758, 0, 0], [759, 0, 0], [760, 0, 1], [761, 0, 1]]
+    }, 
+    {
+      "op": "null", 
+      "name": "conv82_weight", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512, 0, 1, 1)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "conv82_bias", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "zeros", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "Convolution", 
+      "name": "conv82_fwd", 
+      "attrs": {
+        "dilate": "(1, 1)", 
+        "kernel": "(1, 1)", 
+        "layout": "NCHW", 
+        "no_bias": "False", 
+        "num_filter": "512", 
+        "num_group": "1", 
+        "pad": "(0, 0)", 
+        "stride": "(1, 1)"
+      }, 
+      "inputs": [[762, 0, 0], [763, 0, 0], [764, 0, 0]]
+    }, 
+    {
+      "op": "Activation", 
+      "name": "relu94_fwd", 
+      "attrs": {"act_type": "relu"}, 
+      "inputs": [[765, 0, 0]]
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm78_gamma", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "ones", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm78_beta", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "zeros", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm78_running_mean", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "zeros", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "batchnorm78_running_var", 
+      "attrs": {
+        "__dtype__": "0", 
+        "__init__": "ones", 
+        "__lr_mult__": "1.0", 
+        "__shape__": "(512,)", 
+        "__storage_type__": "0", 
+        "__wd_mult__": "1.0"
+      }, 
+      "inputs": []
+    }, 
+    {
+      "op": "BatchNorm", 
+      "name": "batchnorm78_fwd", 
+      "attrs": {
+        "axis": "1", 
+        "eps": "1e-05", 
+        "fix_gamma": "False", 
+        "momentum": "0.9", 
+        "use_global_stats": "False"
+      }, 
+      "inputs": [[766, 0, 0], [767, 0, 0], [768, 0, 0], [769, 0, 1], [770, 0, 1]]
     }, 
     {
       "op": "_contrib_MultiBoxPrior", 
@@ -8546,7 +9176,7 @@
         "ratios": "[1, 2, 0.5]", 
         "sizes": "[0.2, 0.272]"
       }, 
-      "inputs": [[717, 0, 0]]
+      "inputs": [[771, 0, 0]]
     }, 
     {
       "op": "Concat", 
@@ -8555,7 +9185,7 @@
         "dim": "1", 
         "num_args": "1"
       }, 
-      "inputs": [[718, 0, 0]]
+      "inputs": [[772, 0, 0]]
     }, 
     {
       "op": "Concat", 
@@ -8564,7 +9194,7 @@
         "dim": "1", 
         "num_args": "3"
       }, 
-      "inputs": [[679, 0, 0], [699, 0, 0], [719, 0, 0]]
+      "inputs": [[697, 0, 0], [735, 0, 0], [773, 0, 0]]
     }, 
     {
       "op": "null", 
@@ -8604,18 +9234,18 @@
         "pad": "(1, 1)", 
         "stride": "(1, 1)"
       }, 
-      "inputs": [[677, 0, 0], [721, 0, 0], [722, 0, 0]]
+      "inputs": [[695, 0, 0], [775, 0, 0], [776, 0, 0]]
     }, 
     {
       "op": "transpose", 
       "name": "lightretina0_transpose0", 
       "attrs": {"axes": "(0, 2, 3, 1)"}, 
-      "inputs": [[723, 0, 0]]
+      "inputs": [[777, 0, 0]]
     }, 
     {
       "op": "Flatten", 
       "name": "lightretina0_flatten0", 
-      "inputs": [[724, 0, 0]]
+      "inputs": [[778, 0, 0]]
     }, 
     {
       "op": "Concat", 
@@ -8624,13 +9254,13 @@
         "dim": "1", 
         "num_args": "1"
       }, 
-      "inputs": [[725, 0, 0]]
+      "inputs": [[779, 0, 0]]
     }, 
     {
       "op": "Reshape", 
       "name": "lightretina0_reshape0", 
       "attrs": {"shape": "(0, -1, 2)"}, 
-      "inputs": [[726, 0, 0]]
+      "inputs": [[780, 0, 0]]
     }, 
     {
       "op": "null", 
@@ -8670,18 +9300,18 @@
         "pad": "(1, 1)", 
         "stride": "(1, 1)"
       }, 
-      "inputs": [[697, 0, 0], [728, 0, 0], [729, 0, 0]]
+      "inputs": [[733, 0, 0], [782, 0, 0], [783, 0, 0]]
     }, 
     {
       "op": "transpose", 
       "name": "lightretina1_transpose0", 
       "attrs": {"axes": "(0, 2, 3, 1)"}, 
-      "inputs": [[730, 0, 0]]
+      "inputs": [[784, 0, 0]]
     }, 
     {
       "op": "Flatten", 
       "name": "lightretina1_flatten0", 
-      "inputs": [[731, 0, 0]]
+      "inputs": [[785, 0, 0]]
     }, 
     {
       "op": "Concat", 
@@ -8690,13 +9320,13 @@
         "dim": "1", 
         "num_args": "1"
       }, 
-      "inputs": [[732, 0, 0]]
+      "inputs": [[786, 0, 0]]
     }, 
     {
       "op": "Reshape", 
       "name": "lightretina1_reshape0", 
       "attrs": {"shape": "(0, -1, 2)"}, 
-      "inputs": [[733, 0, 0]]
+      "inputs": [[787, 0, 0]]
     }, 
     {
       "op": "null", 
@@ -8736,18 +9366,18 @@
         "pad": "(1, 1)", 
         "stride": "(1, 1)"
       }, 
-      "inputs": [[717, 0, 0], [735, 0, 0], [736, 0, 0]]
+      "inputs": [[771, 0, 0], [789, 0, 0], [790, 0, 0]]
     }, 
     {
       "op": "transpose", 
       "name": "lightretina2_transpose0", 
       "attrs": {"axes": "(0, 2, 3, 1)"}, 
-      "inputs": [[737, 0, 0]]
+      "inputs": [[791, 0, 0]]
     }, 
     {
       "op": "Flatten", 
       "name": "lightretina2_flatten0", 
-      "inputs": [[738, 0, 0]]
+      "inputs": [[792, 0, 0]]
     }, 
     {
       "op": "Concat", 
@@ -8756,13 +9386,13 @@
         "dim": "1", 
         "num_args": "1"
       }, 
-      "inputs": [[739, 0, 0]]
+      "inputs": [[793, 0, 0]]
     }, 
     {
       "op": "Reshape", 
       "name": "lightretina2_reshape0", 
       "attrs": {"shape": "(0, -1, 2)"}, 
-      "inputs": [[740, 0, 0]]
+      "inputs": [[794, 0, 0]]
     }, 
     {
       "op": "Concat", 
@@ -8771,7 +9401,7 @@
         "dim": "1", 
         "num_args": "3"
       }, 
-      "inputs": [[727, 0, 0], [734, 0, 0], [741, 0, 0]]
+      "inputs": [[781, 0, 0], [788, 0, 0], [795, 0, 0]]
     }, 
     {
       "op": "null", 
@@ -8811,18 +9441,18 @@
         "pad": "(1, 1)", 
         "stride": "(1, 1)"
       }, 
-      "inputs": [[677, 0, 0], [743, 0, 0], [744, 0, 0]]
+      "inputs": [[695, 0, 0], [797, 0, 0], [798, 0, 0]]
     }, 
     {
       "op": "transpose", 
       "name": "lightretina0_transpose1", 
       "attrs": {"axes": "(0, 2, 3, 1)"}, 
-      "inputs": [[745, 0, 0]]
+      "inputs": [[799, 0, 0]]
     }, 
     {
       "op": "Flatten", 
       "name": "lightretina0_flatten1", 
-      "inputs": [[746, 0, 0]]
+      "inputs": [[800, 0, 0]]
     }, 
     {
       "op": "Concat", 
@@ -8831,7 +9461,7 @@
         "dim": "1", 
         "num_args": "1"
       }, 
-      "inputs": [[747, 0, 0]]
+      "inputs": [[801, 0, 0]]
     }, 
     {
       "op": "null", 
@@ -8871,18 +9501,18 @@
         "pad": "(1, 1)", 
         "stride": "(1, 1)"
       }, 
-      "inputs": [[697, 0, 0], [749, 0, 0], [750, 0, 0]]
+      "inputs": [[733, 0, 0], [803, 0, 0], [804, 0, 0]]
     }, 
     {
       "op": "transpose", 
       "name": "lightretina1_transpose1", 
       "attrs": {"axes": "(0, 2, 3, 1)"}, 
-      "inputs": [[751, 0, 0]]
+      "inputs": [[805, 0, 0]]
     }, 
     {
       "op": "Flatten", 
       "name": "lightretina1_flatten1", 
-      "inputs": [[752, 0, 0]]
+      "inputs": [[806, 0, 0]]
     }, 
     {
       "op": "Concat", 
@@ -8891,7 +9521,7 @@
         "dim": "1", 
         "num_args": "1"
       }, 
-      "inputs": [[753, 0, 0]]
+      "inputs": [[807, 0, 0]]
     }, 
     {
       "op": "null", 
@@ -8931,18 +9561,18 @@
         "pad": "(1, 1)", 
         "stride": "(1, 1)"
       }, 
-      "inputs": [[717, 0, 0], [755, 0, 0], [756, 0, 0]]
+      "inputs": [[771, 0, 0], [809, 0, 0], [810, 0, 0]]
     }, 
     {
       "op": "transpose", 
       "name": "lightretina2_transpose1", 
       "attrs": {"axes": "(0, 2, 3, 1)"}, 
-      "inputs": [[757, 0, 0]]
+      "inputs": [[811, 0, 0]]
     }, 
     {
       "op": "Flatten", 
       "name": "lightretina2_flatten1", 
-      "inputs": [[758, 0, 0]]
+      "inputs": [[812, 0, 0]]
     }, 
     {
       "op": "Concat", 
@@ -8951,7 +9581,7 @@
         "dim": "1", 
         "num_args": "1"
       }, 
-      "inputs": [[759, 0, 0]]
+      "inputs": [[813, 0, 0]]
     }, 
     {
       "op": "Concat", 
@@ -8960,7 +9590,7 @@
         "dim": "1", 
         "num_args": "3"
       }, 
-      "inputs": [[748, 0, 0], [754, 0, 0], [760, 0, 0]]
+      "inputs": [[802, 0, 0], [808, 0, 0], [814, 0, 0]]
     }
   ], 
   "arg_nodes": [
@@ -9381,52 +10011,88 @@
     654, 
     660, 
     661, 
-    663, 
     664, 
+    665, 
     666, 
     667, 
     669, 
     670, 
-    672, 
     673, 
     674, 
     675, 
-    680, 
-    681, 
+    676, 
+    678, 
+    679, 
+    682, 
     683, 
     684, 
-    686, 
+    685, 
     687, 
-    689, 
-    690, 
+    688, 
+    691, 
     692, 
     693, 
     694, 
-    695, 
-    700, 
-    701, 
+    698, 
+    699, 
+    702, 
     703, 
     704, 
-    706, 
+    705, 
     707, 
-    709, 
-    710, 
+    708, 
+    711, 
     712, 
     713, 
     714, 
-    715, 
+    716, 
+    717, 
+    720, 
     721, 
     722, 
-    728, 
+    723, 
+    725, 
+    726, 
     729, 
-    735, 
+    730, 
+    731, 
+    732, 
     736, 
+    737, 
+    740, 
+    741, 
+    742, 
     743, 
-    744, 
+    745, 
+    746, 
     749, 
     750, 
+    751, 
+    752, 
+    754, 
     755, 
-    756
+    758, 
+    759, 
+    760, 
+    761, 
+    763, 
+    764, 
+    767, 
+    768, 
+    769, 
+    770, 
+    775, 
+    776, 
+    782, 
+    783, 
+    789, 
+    790, 
+    797, 
+    798, 
+    803, 
+    804, 
+    809, 
+    810
   ], 
   "node_row_ptr": [
     0, 
@@ -10098,17 +10764,15 @@
     804, 
     805, 
     806, 
-    807, 
-    808, 
     809, 
     810, 
     811, 
     812, 
     813, 
     814, 
+    815, 
+    816, 
     817, 
-    818, 
-    819, 
     820, 
     821, 
     822, 
@@ -10118,17 +10782,15 @@
     826, 
     827, 
     828, 
-    829, 
-    830, 
     831, 
     832, 
     833, 
     834, 
     835, 
     836, 
+    837, 
+    838, 
     839, 
-    840, 
-    841, 
     842, 
     843, 
     844, 
@@ -10140,17 +10802,15 @@
     850, 
     851, 
     852, 
-    853, 
-    854, 
     855, 
     856, 
     857, 
     858, 
+    859, 
+    860, 
     861, 
     862, 
     863, 
-    864, 
-    865, 
     866, 
     867, 
     868, 
@@ -10160,8 +10820,6 @@
     872, 
     873, 
     874, 
-    875, 
-    876, 
     877, 
     878, 
     879, 
@@ -10171,8 +10829,6 @@
     883, 
     884, 
     885, 
-    886, 
-    887, 
     888, 
     889, 
     890, 
@@ -10184,15 +10840,79 @@
     896, 
     897, 
     898, 
-    899, 
-    900, 
     901, 
     902, 
     903, 
     904, 
     905, 
-    906
+    906, 
+    907, 
+    908, 
+    909, 
+    912, 
+    913, 
+    914, 
+    915, 
+    916, 
+    917, 
+    918, 
+    919, 
+    920, 
+    923, 
+    924, 
+    925, 
+    926, 
+    927, 
+    928, 
+    929, 
+    930, 
+    931, 
+    934, 
+    935, 
+    936, 
+    937, 
+    938, 
+    939, 
+    940, 
+    941, 
+    942, 
+    943, 
+    944, 
+    945, 
+    946, 
+    947, 
+    948, 
+    949, 
+    950, 
+    951, 
+    952, 
+    953, 
+    954, 
+    955, 
+    956, 
+    957, 
+    958, 
+    959, 
+    960, 
+    961, 
+    962, 
+    963, 
+    964, 
+    965, 
+    966, 
+    967, 
+    968, 
+    969, 
+    970, 
+    971, 
+    972, 
+    973, 
+    974, 
+    975, 
+    976, 
+    977, 
+    978
   ], 
-  "heads": [[720, 0, 0], [742, 0, 0], [761, 0, 0]], 
+  "heads": [[774, 0, 0], [796, 0, 0], [815, 0, 0]], 
   "attrs": {"mxnet_version": ["int", 10500]}
 }
