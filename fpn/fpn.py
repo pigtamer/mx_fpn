@@ -116,7 +116,7 @@ class FPN(nn.HybridBlock):
                                nn.Activation('relu'),
                                nn.MaxPool2D(2),
                                nn.BatchNorm(in_channels=512))
-        self.ssd_1 = ssd.LightSSD(num_cls=1, num_ach=num_anchors)
+        self.ssd_1 = ssd.LightRetina(num_cls=1, num_ach=num_anchors)
 
         self.feature_blk_2 = nn.HybridSequential()
         self.feature_blk_2.add(nn.Conv2D(channels=512, kernel_size=3, padding=1),
@@ -128,7 +128,7 @@ class FPN(nn.HybridBlock):
                                nn.MaxPool2D(2),
                                nn.BatchNorm(in_channels=512))
 
-        self.ssd_2 = ssd.LightSSD(num_cls=1, num_ach=num_anchors)
+        self.ssd_2 = ssd.LightRetina(num_cls=1, num_ach=num_anchors)
 
         self.feature_blk_3 = nn.HybridSequential()
         self.feature_blk_3.add(nn.Conv2D(channels=512, kernel_size=3, padding=1),
@@ -139,7 +139,7 @@ class FPN(nn.HybridBlock):
                                nn.Activation('relu'),
                                nn.MaxPool2D(2),
                                nn.BatchNorm(in_channels=512))
-        self.ssd_3 = ssd.LightSSD(num_cls=1, num_ach=num_anchors)
+        self.ssd_3 = ssd.LightRetina(num_cls=1, num_ach=num_anchors)
 
     def hybrid_forward(self, F, x):
         x = self.BaseBlk(x)
@@ -208,9 +208,9 @@ class ResNet_FPN(nn.HybridBlock):
             IF_HEAD=True
         )
 
-        self.ssd_1 = ssd.LightSSD(num_cls=1, num_ach=num_anchors)
-        self.ssd_2 = ssd.LightSSD(num_cls=1, num_ach=num_anchors)
-        self.ssd_3 = ssd.LightSSD(num_cls=1, num_ach=num_anchors)
+        self.ssd_1 = ssd.LightRetina(num_cls=1, num_ach=num_anchors)
+        self.ssd_2 = ssd.LightRetina(num_cls=1, num_ach=num_anchors)
+        self.ssd_3 = ssd.LightRetina(num_cls=1, num_ach=num_anchors)
 
         self.chan_align_32 = ChannelAdapt(out_channels=1024)
         self.chan_align_21 = ChannelAdapt(out_channels=512)
