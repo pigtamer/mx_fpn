@@ -15,7 +15,7 @@ sw = mxb.SummaryWriter(logdir='./logs', flush_secs=5)
 parser = argparse.ArgumentParser()
 parser.add_argument("-l", "--load", dest="load",
                     help="bool: load model to directly infer rather than training",
-                    type=int, default=1)
+                    type=int, default=0)
 parser.add_argument("-b", "--base", dest="base",
                     help="bool: using additional base network",
                     type=int, default=0)
