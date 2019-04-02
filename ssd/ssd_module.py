@@ -135,7 +135,8 @@ class LightRetina(nn.HybridBlock):
         if not self._IF_TINY:
             x = self.BaseBlk(x)
         anchors, cls_preds, bbox_preds = [None], [None], [None]
-        for k in range(1):
+        # TODO: WHAT THE HELLA IS THIS?
+        for k in range(1): # We got some problem here.
             (x, anchors[k], cls_preds[k], bbox_preds[k]) = \
                 hybrid_blk_forward(x, getattr(self, "blk%d" % (k + 1)),
                             anchor_params.sizes[k], anchor_params.ratios[k],
