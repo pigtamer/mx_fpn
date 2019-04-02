@@ -90,7 +90,8 @@ else:
         # Checkpoint
         if (epoch + 1) % 5 == 0:
             net.export('FPN')
-            _, val_recorder[int(epoch / 5)], _ = validate(val_iter, net, ctx)
+            _1, _2, _3 = validate(val_iter, net, ctx)
+            val_recorder[int(epoch / 5)] = (_1, _2, _3)
             """
             # bs64e100is128
             x128=\

@@ -45,6 +45,6 @@ def validate(val_iter, net, ctx=mx.gpu()):
         acc_bbox /= m;
     else:
         acc_bbox = 1;
-    print('!> validate: class err %.2e, bbox mae %.2e' % (
+    print('!> validate: class err %f, bbox mae %f' % (
         acc_cls, acc_bbox))
     return (acc_l, acc_cls, acc_bbox)
