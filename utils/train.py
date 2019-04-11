@@ -2,12 +2,15 @@ import mxnet as mx
 from mxnet.gluon import nn
 from mxnet.gluon import data as gdata
 from mxnet.gluon import loss as gloss
+from gluoncv import loss as gcvloss
 from mxnet import autograd, init, contrib, nd, sym
 from utils.utils import calc_loss, cls_eval, bbox_eval
 
 cls_lossfunc = gloss.SoftmaxCrossEntropyLoss()
-
+# cls_lossfunc = gcvloss.FocalLoss()
 bbox_lossfunc = gloss.L1Loss()
+
+
 
 
 def training(data_iter, num_epoches, cls_lossfunc, bbox_lossfunc):
@@ -27,8 +30,9 @@ def validate(val_iter, net, ctx=mx.gpu()):
         # generate anchors and generate bboxes
         anchors, cls_preds, bbox_preds = net(X)
         # assign classes and bboxes for each anchor
-        bbox_labels, bbox_masks, cls_labels = nd.contrib.MultiBoxTarget(anchors, Y,
-                                                                        cls_preds.transpose((0, 2, 1)))
+        bbox_labels, bbox_masks, cls_labels = nd.contrib.MultiBoxTarget(anchor=anchors, label=Y,
+                                                                        cls_pred=cls_preds.transpose((0, 2, 1)),
+                                                                        negative_mining_ratio=10)
         # calc loss
         l = calc_loss(cls_lossfunc, bbox_lossfunc, cls_preds, cls_labels,
                       bbox_preds, bbox_labels, bbox_masks)
@@ -47,4 +51,4 @@ def validate(val_iter, net, ctx=mx.gpu()):
         acc_bbox = 1;
     print('!> validate: class err %f, bbox mae %f' % (
         acc_cls, acc_bbox))
-    return (acc_l, acc_cls, acc_bbox)
+    return (acc_l.asscalar(), acc_cls, acc_bbox)
