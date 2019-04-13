@@ -27,7 +27,7 @@ params = {
 }
 
 
-class ResidualUnit(nn.HybridBlock):
+class ResidualUnit(nn.Block):
     def __init__(self, l_chans, l_kernel_sizes, chan_params={None}, bbn=False, resize=False):
         """
         Generator for residual unit
@@ -44,7 +44,7 @@ class ResidualUnit(nn.HybridBlock):
         """
         assert len(l_kernel_sizes) == len(l_chans)
         self.bbn = bbn
-        self.branch = nn.HybridSequential()
+        self.branch = nn.Sequential()
         if bbn or self.bbn:
             self.branch.add(
                 nn.Conv2D(channels=chan_params["channel"], kernel_size=chan_params["kernel_size"],
@@ -60,7 +60,7 @@ class ResidualUnit(nn.HybridBlock):
                 nn.BatchNorm(in_channels=l_chans[-1])
             )
 
-        self.trunk = nn.HybridSequential()
+        self.trunk = nn.Sequential()
         for k in range(len(l_chans)):
             self.trunk.add(
                 nn.Conv2D(channels=l_chans[k], kernel_size=l_kernel_sizes[k],
@@ -83,7 +83,7 @@ class ResidualUnit(nn.HybridBlock):
         return res
 
 
-class ResidualLayer(nn.HybridBlock):
+class ResidualLayer(nn.Block):
     def __init__(self, num_stages, ll_chans, ll_kernel_sizes, chan_param_onlybranch, **kwargs):
         """
         Generator for a residual unit
@@ -98,7 +98,7 @@ class ResidualLayer(nn.HybridBlock):
         :param kwargs: ~
         """
         super(ResidualLayer, self).__init__(**kwargs)
-        self.trunk = nn.HybridSequential()
+        self.trunk = nn.Sequential()
         for k in range(num_stages):
             if k == 0:
                 self.trunk.add(ResidualUnit(ll_chans[k], ll_kernel_sizes[k],
@@ -110,7 +110,7 @@ class ResidualLayer(nn.HybridBlock):
         return self.trunk(x)
 
 
-class ResNet50(nn.HybridBlock):
+class ResNet50(nn.Block):
     def __init__(self, params, IF_HEAD=True, IF_DENSE=True, **kwargs):
         """
         This is builder for a hybrid resnet-50 network
@@ -124,9 +124,9 @@ class ResNet50(nn.HybridBlock):
         kernel_sizes = params["kernel_sizes"]
         branches = params["branches"]
         assert len(chans) == len(kernel_sizes) & len(kernel_sizes) == len(branches)
-        self.net = nn.HybridSequential()
+        self.net = nn.Sequential()
         if IF_HEAD:
-            conv1 = nn.HybridSequential()
+            conv1 = nn.Sequential()
             conv1.add(
                 nn.Conv2D(channels=64, kernel_size=7,
                           strides=2, padding=3),
@@ -167,10 +167,8 @@ def test():
     # print(net)
 
     # Test for a Residual Network.
-    net = ResNet50(params); xsym = mx.sym.Variable('data')
-    net.hybridize()
+    net = ResNet50(params);
     net.initialize(ctx=ctx)
-    mx.viz.plot_network(net(xsym)).view() # view the network structure
 
     cnt = time.time()
     net(x)

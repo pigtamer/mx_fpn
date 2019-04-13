@@ -25,21 +25,21 @@ def blk_forward(X, blk, size, ratio, cls_predictor, bbox_predictor):
 
 def hybrid_blk_forward(X, blk, size, ratio, cls_predictor, bbox_predictor):
     Y = blk(X)
-    anchors = sym.contrib.MultiBoxPrior(data=Y, sizes=size, ratios=ratio)
+    anchors = nd.contrib.MultiBoxPrior(data=Y, sizes=size, ratios=ratio)
     # anchors = nd.contrib.MultiBoxPrior(Y, sizes=size, ratios=ratio)
     cls_preds = cls_predictor(Y)
     bbox_preds = bbox_predictor(Y)
     return (Y, anchors, cls_preds, bbox_preds)
 
 
-class LightSSD(nn.HybridBlock):
+class LightSSD(nn.Block):
     def __init__(self, num_cls, num_ach, IF_TINY=True, **kwargs):
         super(LightSSD, self).__init__(**kwargs)
         self.num_classes = num_cls
         self._IF_TINY = IF_TINY
         if not self._IF_TINY:
             self.BaseBlk = BaseNetwork(False)
-        self.blk1 = nn.HybridSequential()
+        self.blk1 = nn.Sequential()
         self.blk1.add(nn.Conv2D(channels=1024, kernel_size=3, strides=1, padding=0),
                       nn.Conv2D(channels=1024, kernel_size=1, strides=1, padding=1),
                       nn.BatchNorm(in_channels=1024),
@@ -49,7 +49,7 @@ class LightSSD(nn.HybridBlock):
         self.cls1 = genClsPredictor(num_cls, num_ach)
         self.reg1 = genBBoxRegressor(num_ach)
 
-        self.blk2 = nn.HybridSequential()
+        self.blk2 = nn.Sequential()
         self.blk2.add(nn.Conv2D(channels=256, kernel_size=1, strides=1, padding=0),
                       nn.Conv2D(channels=512, kernel_size=3, strides=1, padding=1),
                       nn.BatchNorm(in_channels=512),
@@ -59,7 +59,7 @@ class LightSSD(nn.HybridBlock):
         self.cls2 = genClsPredictor(num_cls, num_ach)
         self.reg2 = genBBoxRegressor(num_ach)
 
-        self.blk3 = nn.HybridSequential()
+        self.blk3 = nn.Sequential()
         self.blk3.add(nn.Conv2D(channels=128, kernel_size=1, strides=1, padding=0),
                       nn.Conv2D(channels=256, kernel_size=3, strides=1, padding=1),
                       nn.BatchNorm(in_channels=256),
@@ -69,7 +69,7 @@ class LightSSD(nn.HybridBlock):
         self.cls3 = genClsPredictor(num_cls, num_ach)
         self.reg3 = genBBoxRegressor(num_ach)
 
-        self.blk4 = nn.HybridSequential()
+        self.blk4 = nn.Sequential()
         self.blk4.add(nn.Conv2D(channels=128, kernel_size=1, strides=1, padding=0),
                       nn.Conv2D(channels=256, kernel_size=3, strides=1, padding=1),
                       nn.BatchNorm(in_channels=256),
@@ -79,7 +79,7 @@ class LightSSD(nn.HybridBlock):
         self.cls4 = genClsPredictor(num_cls, num_ach)
         self.reg4 = genBBoxRegressor(num_ach)
 
-        self.blk5 = nn.HybridSequential()
+        self.blk5 = nn.Sequential()
         self.blk5.add(nn.Conv2D(channels=128, kernel_size=1, strides=1, padding=0),
                       nn.Conv2D(channels=256, kernel_size=3, strides=1, padding=1),
                       nn.BatchNorm(in_channels=256),
@@ -101,19 +101,19 @@ class LightSSD(nn.HybridBlock):
                                    anchor_params.sizes[k], anchor_params.ratios[k],
                                    getattr(self, "cls%d" % (k + 1)), getattr(self, "reg%d" % (k + 1)))
             # print("layer[%d], fmap shape %s, anchor %s" % (k + 1, x.shape, anchors[k].shape))
-        return (sym.concat(*anchors, dim=1),
+        return (nd.concat(*anchors, dim=1),
                 hybrid_concat_preds(cls_preds).reshape((0, -1, self.num_classes + 1)),
                 hybrid_concat_preds(bbox_preds))
 
 
-class LightRetina(nn.HybridBlock):
+class LightRetina(nn.Block):
     def __init__(self, num_cls, num_ach, IF_TINY=True, **kwargs):
         super(LightRetina, self).__init__(**kwargs)
         self.num_classes = num_cls
         self._IF_TINY = IF_TINY
         if not self._IF_TINY:
             self.BaseBlk = BaseNetwork(False)
-        self.blk1 = nn.HybridSequential()
+        self.blk1 = nn.Sequential()
         self.blk1.add(nn.Conv2D(channels=512, kernel_size=3, strides=1, padding=1),
                       nn.Activation('relu'),
                       nn.BatchNorm(in_channels=512),
@@ -142,12 +142,12 @@ class LightRetina(nn.HybridBlock):
                             anchor_params.retina_size[k], anchor_params.ratios[k],
                             getattr(self, "cls%d" % (k + 1)), getattr(self, "reg%d" % (k + 1)))
             # print("SSD:     layer[%d], fmap shape %s, anchor %s" % (k + 1, x.shape, anchors[k].shape))
-        return (sym.concat(*anchors, dim=1),
+        return (nd.concat(*anchors, dim=1),
                 hybrid_concat_preds(cls_preds).reshape((0, -1, self.num_classes + 1)),
                 hybrid_concat_preds(bbox_preds))
 
 
-class BaseNetwork(nn.HybridBlock):  # VGG base network, without fc
+class BaseNetwork(nn.Block):  # VGG base network, without fc
     def __init__(self, IF_TINY, **kwargs):
         super(BaseNetwork, self).__init__(**kwargs)
         self.IF_TINY = IF_TINY
