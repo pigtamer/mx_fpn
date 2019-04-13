@@ -75,7 +75,7 @@ class ResidualUnit(nn.Block):
 
         self.final_relu = nn.Activation(activation='relu')
 
-    def hybrid_forward(self, F, x, *args, **kwargs):
+    def forward(self, x, *args, **kwargs):
         res_shortcut = self.branch(x)
         res_trunk = self.trunk(x)
         res = self.final_relu(res_shortcut + res_trunk)
@@ -106,7 +106,7 @@ class ResidualLayer(nn.Block):
             else:
                 self.trunk.add(ResidualUnit(ll_chans[k], ll_kernel_sizes[k]))
 
-    def hybrid_forward(self, F, x, *args, **kwargs):
+    def forward(self,  x, *args, **kwargs):
         return self.trunk(x)
 
 
@@ -145,7 +145,7 @@ class ResNet50(nn.Block):
                 nn.Dense(1000)
             )
 
-    def hybrid_forward(self, F, x, *args, **kwargs):
+    def forward(self,  x, *args, **kwargs):
         return self.net(x)
 
 

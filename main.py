@@ -7,9 +7,6 @@ from utils.train import validate
 import matplotlib.pyplot as plt
 import fpn
 import time, argparse
-import mxboard as mxb
-
-sw = mxb.SummaryWriter(logdir='./logs', flush_secs=5)
 
 # parsing cli arguments
 parser = argparse.ArgumentParser()
@@ -19,6 +16,7 @@ parser.add_argument("-l", "--load", dest="load",
 parser.add_argument("-b", "--base", dest="base",
                     help="bool: using additional base network",
                     type=int, default=0)
+
 parser.add_argument("-e", "--epoches", dest="num_epoches",
                     help="int: trainig epoches",
                     type=int, default=20)
@@ -50,7 +48,6 @@ args = parser.parse_args()
 ctx = mx.gpu()
 net = fpn.ResNet_FPN(num_layers=3)
 net.initialize(init="Xavier", ctx=ctx)
-net.hybridize()
 
 batch_size, edge_size = args.batch_size, args.input_size
 train_iter, val_iter = predata.load_data_uav(args.data_path, batch_size, edge_size)
@@ -63,9 +60,7 @@ bbox_loss = gloss.L1Loss()
 
 IF_LOAD_MODEL = args.load
 if IF_LOAD_MODEL:
-    # net.load_parameters(args.model_path) # for save_parameters
-    net = nn.SymbolBlock.imports("FPN-symbol.json", ['data'], "FPN-0000.params", ctx=ctx)
-    sw.add_graph(net)
+    net.load_parameters(args.model_path) # for save_parameters
 else:
     val_recorder = [None] * int(args.num_epoches / 5)
     for epoch in range(args.num_epoches):
@@ -97,15 +92,10 @@ else:
             epoch + 1, 1 - acc_sum / n, mae_sum / m, time.time() - start))
         # Checkpoint
         if (epoch + 1) % 5 == 0:
-            net.export('FPN')
+            net.save_parameters('FPN')
             _1, _2, _3 = validate(val_iter, net, ctx)
             val_recorder[int(epoch / 5)] = (_1, _2, _3)
             print(val_recorder)
-    # plt.figure()
-    # plt.plot(val_recorder)
-    # plt.title("validating curve");
-    # plt.show()
-
 
 def predict(X):
     anchors, cls_preds, bbox_preds = net(X.as_in_context(ctx))
