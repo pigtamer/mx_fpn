@@ -48,7 +48,8 @@ def fusionFMaps(lMap, sMap, method='upconv'):
     else:
         raise Exception("ERROR! [jcy checkpoint]: Unexpected enlarging method.")
 
-    res = (lMap + upconv_sMap) / 2  # add large fmap with the smaller one
+    res = (lMap + upconv_sMap) / 2 # add large fmap with the smaller one
+
     # res = nd.broadcast_div(res, nd.max(res))
     return res
 
@@ -56,7 +57,7 @@ def fusionFMaps(lMap, sMap, method='upconv'):
 class VGG_FPN(nn.Block):
     def __init__(self, num_layers=3, num_classes=1, **kwargs):
         super().__init__(**kwargs)
-        self.BaseBlk = ssd.BaseNetwork()
+        self.BaseBlk = ssd.BaseNetwork(IF_TINY=True)
         self.feature_blk_1 = nn.Sequential()
         self.feature_blk_1.add(
             nn.Conv2D(channels=512, kernel_size=3, padding=1, activation='relu'),
@@ -71,9 +72,9 @@ class VGG_FPN(nn.Block):
             nn.Conv2D(channels=512, kernel_size=3, padding=1, activation='relu'),
             nn.MaxPool2D(pool_size=(2, 2))
         )
-        self.ssd_1 = ssd.LightSSD(num_cls=1, num_ach=num_anchors)
-        self.ssd_2 = ssd.LightSSD(num_cls=1, num_ach=num_anchors)
-        self.ssd_3 = ssd.LightSSD(num_cls=1, num_ach=num_anchors)
+        self.ssd_1 = ssd.LightRetina(num_cls=1, num_ach=retina_num_anchors)
+        self.ssd_2 = ssd.LightRetina(num_cls=1, num_ach=retina_num_anchors)
+        self.ssd_3 = ssd.LightRetina(num_cls=1, num_ach=retina_num_anchors)
 
         self.chan_align_32 = getChannelAdapt(out_channels=1024)
         self.chan_align_21 = getChannelAdapt(out_channels=256)
@@ -95,14 +96,14 @@ class VGG_FPN(nn.Block):
         anchors[1], cls_preds[1], bbox_preds[1] = self.ssd_2(fusion_32)
         anchors[0], cls_preds[0], bbox_preds[0] = self.ssd_1(fusion_21)
 
-        print("-----------------------------------------------\n"
-              "FPN:     [top -> bottom]\n"
-              "         fusion[3]: %s;\n"
-              "         fusion[2]: %s;\n"
-              "         fusion[1]: %s;\n"
-              "         input    : %s;\n"
-              "-----------------------------------------------\n"
-              % (fusion_33.shape, fusion_32.shape, fusion_21.shape, x.shape))
+        # print("-----------------------------------------------\n"
+        #       "FPN:     [top -> bottom]\n"
+        #       "         fusion[3]: %s;\n"
+        #       "         fusion[2]: %s;\n"
+        #       "         fusion[1]: %s;\n"
+        #       "         input    : %s;\n"
+        #       "-----------------------------------------------\n"
+        #       % (fusion_33.shape, fusion_32.shape, fusion_21.shape, x.shape))
         return (nd.concat(*anchors, dim=1),
                 nd.concat(*cls_preds, dim=1),
                 nd.concat(*bbox_preds, dim=1))
@@ -170,14 +171,14 @@ class ResNet_FPN(nn.Block):
         anchors[1], cls_preds[1], bbox_preds[1] = self.ssd_2(fusion_32)
         anchors[0], cls_preds[0], bbox_preds[0] = self.ssd_1(fusion_21)
 
-        print("-----------------------------------------------\n"
-              "FPN:     [top -> bottom]\n"
-              "         fusion[3]: %s;\n"
-              "         fusion[2]: %s;\n"
-              "         fusion[1]: %s;\n"
-              "         input    : %s;\n"
-              "-----------------------------------------------\n"
-              % (fusion_33.shape, fusion_32.shape, fusion_21.shape, x.shape))
+        # print("-----------------------------------------------\n"
+        #       "FPN:     [top -> bottom]\n"
+        #       "         fusion[3]: %s;\n"
+        #       "         fusion[2]: %s;\n"
+        #       "         fusion[1]: %s;\n"
+        #       "         input    : %s;\n"
+        #       "-----------------------------------------------\n"
+        #       % (fusion_33.shape, fusion_32.shape, fusion_21.shape, x.shape))
         return (nd.concat(*anchors, dim=1),
                 nd.concat(*cls_preds, dim=1),
                 nd.concat(*bbox_preds, dim=1))

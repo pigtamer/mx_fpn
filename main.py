@@ -77,8 +77,8 @@ else:
 
                 # assign classes and bboxes for each anchor
                 bbox_labels, bbox_masks, cls_labels = nd.contrib.MultiBoxTarget(anchor=anchors, label=Y,
-                                                                        cls_pred=cls_preds.transpose((0, 2, 1)),
-                                                                        negative_mining_ratio=10)
+                                                                        cls_pred=cls_preds.transpose((0, 2, 1))
+                                                                                )
                 # calc loss
                 l = calc_loss(cls_loss, bbox_loss, cls_preds, cls_labels,
                               bbox_preds, bbox_labels, bbox_masks)
@@ -137,7 +137,7 @@ rd = 0
 while True:
     ret, frame = cap.read()
     img = nd.array(frame)
-    feature = image.imresize(img, 512, 512).astype('float32')
+    feature = image.imresize(img, args.input_size, args.input_size).astype('float32')
     X = feature.transpose((2, 0, 1)).expand_dims(axis=0)
 
     countt = time.time()
