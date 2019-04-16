@@ -35,7 +35,7 @@ def load_data_pikachu(batch_size, edge_size=256):  # edge_size：输出图像的
     return train_iter, val_iter
 
 def load_data_uav(batch_size, edge_size=256):
-    data_dir = '../data/uav'
+    data_dir = '../data/uav/chengdu/'
     # _download_pikachu(data_dir)
     train_iter = image.ImageDetIter(
         path_imgrec=os.path.join(data_dir, 'train.rec'),
