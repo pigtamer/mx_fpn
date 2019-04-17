@@ -52,6 +52,8 @@ class ResidualUnit(nn.HybridBlock):
                 nn.Activation('relu'),
                 nn.BatchNorm(in_channels=chan_params["channel"])
             )
+        else:
+            self.branch.add(nn.BatchNorm(in_channels=l_chans[-1]))
 
         self.trunk = nn.HybridSequential()
         for k in range(len(l_chans)):
@@ -71,11 +73,8 @@ class ResidualUnit(nn.HybridBlock):
 
     def hybrid_forward(self, F, x, *args, **kwargs):
         res_trunk = self.trunk(x)
-        if self.bbn:
-            res_shortcut = self.branch(x)
-            res = self.final_relu(res_shortcut + res_trunk)
-        else:
-            res = self.final_relu(x + res_trunk)
+        res_shortcut = self.branch(x)
+        res = self.final_relu(res_shortcut + res_trunk)
         # print(res.shape)
         return res
 

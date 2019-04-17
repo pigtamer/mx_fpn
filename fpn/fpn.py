@@ -46,7 +46,7 @@ def fusionFMaps(lMap, sMap, upconv_ksize=3, method='upconv'):
         # consider re-enable this when things are done and you are ready for the training of
         # the params in upconv blks
         # ^
-        # ^ this is not a problem asshole. Do you think that color images are special?
+        # ^ this is not a problem. Do you think that color images are special?
 
     else:
         raise Exception("ERROR! [jcy checkpoint]: Unexpected enlarging method.")
