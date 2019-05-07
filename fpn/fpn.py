@@ -77,7 +77,8 @@ def hybrid_fusionFMaps(lMap, sMap, neighbor_scale=2, method='upconv'):
     else:
         raise Exception("ERROR! [jcy checkpoint]: Unexpected enlarging method.")
 
-    res = (lMap + upconv_sMap) / 2  # add large fmap with the smaller one
+    res = (0*lMap + upconv_sMap) / 1  # add large fmap with the smaller one
+
     # res = sym.broadcast_div(res, sym.max(res))
     return res
 

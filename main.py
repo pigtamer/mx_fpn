@@ -31,7 +31,7 @@ parser.add_argument("-is", "--imsize", dest="input_size",
 
 parser.add_argument("-lr", "--learning_rate", dest="learning_rate",
                     help="float: learning rate of optimization process",
-                    type=float, default=0.005)
+                    type=float, default=0.0005)
 parser.add_argument("-opt", "--optimize", dest="optimize_method",
                     help="optimization method",
                     type=str, default="sgd")
@@ -49,11 +49,11 @@ args = parser.parse_args()
 
 ctx = mx.gpu()
 net = fpn.ResNet_FPN(num_layers=3)
-net._children["ssd_1"].collect_params().setattr("lr_mult", 10)
-net._children["ssd_2"].collect_params().setattr("lr_mult", 10)
-net._children["ssd_3"].collect_params().setattr("lr_mult", 10)
-net._children["chan_align_32"].collect_params().setattr("lr_mult", 10)
-net._children["chan_align_21"].collect_params().setattr("lr_mult", 10)
+net._children["ssd_1"].collect_params().setattr("lr_mult", 100)
+net._children["ssd_2"].collect_params().setattr("lr_mult", 100)
+net._children["ssd_3"].collect_params().setattr("lr_mult", 100)
+net._children["chan_align_32"].collect_params().setattr("lr_mult", 100)
+net._children["chan_align_21"].collect_params().setattr("lr_mult", 100)
 
 net.initialize(init="Xavier", ctx=ctx)
 net.hybridize()
@@ -88,8 +88,7 @@ else:
 
                 # assign classes and bboxes for each anchor
                 bbox_labels, bbox_masks, cls_labels = nd.contrib.MultiBoxTarget(anchor=anchors, label=Y,
-                                                                        cls_pred=cls_preds.transpose((0, 2, 1)),
-                                                                        negative_mining_ratio=10)
+                                                                        cls_pred=cls_preds.transpose((0, 2, 1)))
                 # calc loss
                 l = calc_loss(cls_loss, bbox_loss, cls_preds, cls_labels,
                               bbox_preds, bbox_labels, bbox_masks)

@@ -2,14 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="98a98f09-d2d2-4e60-91bb-124f639d4e0b" name="Default Changelist" comment="add more conv layers to fpn blocks">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/mx_myfpn.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/mx_myfpn.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fpn/fpn.py" beforeDir="false" afterPath="$PROJECT_DIR$/fpn/fpn.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ssd/anchor_params.py" beforeDir="false" afterPath="$PROJECT_DIR$/ssd/anchor_params.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ssd/ssd_module.py" beforeDir="false" afterPath="$PROJECT_DIR$/ssd/ssd_module.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/vott_parse.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/vott_parse.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -24,8 +18,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/main.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="203">
-                  <caret line="40" column="61" lean-forward="true" selection-start-line="40" selection-start-column="61" selection-end-line="40" selection-end-column="61" />
+                <state relative-caret-position="239">
+                  <caret line="87" lean-forward="true" selection-start-line="87" selection-end-line="87" />
                   <folding>
                     <element signature="e#0#29#0" expanded="true" />
                   </folding>
@@ -61,8 +55,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/fpn/fpn.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="252">
-                  <caret line="176" column="41" lean-forward="true" selection-start-line="176" selection-start-column="41" selection-end-line="176" selection-end-column="41" />
+                <state relative-caret-position="311">
+                  <caret line="72" column="30" selection-start-line="72" selection-start-column="30" selection-end-line="72" selection-end-column="30" />
                   <folding>
                     <element signature="e#0#18#0" expanded="true" />
                   </folding>
@@ -165,10 +159,10 @@
         <option value="$PROJECT_DIR$/utils/train.py" />
         <option value="$PROJECT_DIR$/utils/vott_parse.py" />
         <option value="$PROJECT_DIR$/syms/resnet50_hybrid.py" />
-        <option value="$PROJECT_DIR$/main.py" />
-        <option value="$PROJECT_DIR$/fpn/fpn.py" />
         <option value="$PROJECT_DIR$/ssd/ssd_module.py" />
         <option value="$PROJECT_DIR$/ssd/anchor_params.py" />
+        <option value="$PROJECT_DIR$/fpn/fpn.py" />
+        <option value="$PROJECT_DIR$/main.py" />
       </list>
     </option>
   </component>
@@ -418,12 +412,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/fpn/fpn.py</url>
-          <line>150</line>
+          <line>151</line>
           <option name="timeStamp" value="19" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/fpn/fpn.py</url>
-          <line>156</line>
+          <line>157</line>
           <option name="timeStamp" value="21" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -433,12 +427,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/fpn/fpn.py</url>
-          <line>276</line>
+          <line>277</line>
           <option name="timeStamp" value="26" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/fpn/fpn.py</url>
-          <line>281</line>
+          <line>282</line>
           <option name="timeStamp" value="31" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -448,17 +442,17 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>160</line>
+          <line>159</line>
           <option name="timeStamp" value="33" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>154</line>
+          <line>153</line>
           <option name="timeStamp" value="35" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main.py</url>
-          <line>165</line>
+          <line>164</line>
           <option name="timeStamp" value="37" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -665,8 +659,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/fpn/fpn.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="176" column="41" lean-forward="true" selection-start-line="176" selection-start-column="41" selection-end-line="176" selection-end-column="41" />
+        <state relative-caret-position="311">
+          <caret line="72" column="30" selection-start-line="72" selection-start-column="30" selection-end-line="72" selection-end-column="30" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
@@ -675,8 +669,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="40" column="61" lean-forward="true" selection-start-line="40" selection-start-column="61" selection-end-line="40" selection-end-column="61" />
+        <state relative-caret-position="239">
+          <caret line="87" lean-forward="true" selection-start-line="87" selection-end-line="87" />
           <folding>
             <element signature="e#0#29#0" expanded="true" />
           </folding>
