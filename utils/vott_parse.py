@@ -39,26 +39,28 @@ def cropToROI(img, img_size_y_x, roi, dst_size):
     """
     The function for cropping large frame to a relatively smaller area
     around the ROI.
+    Only processes 1-channel input
     :param img: input image, or the frame
     :param img_size_y_x: input image size transposed: (y, x)
-    :param roi: (x1, y1, x2, y2), loc of the target. only 1 roi supported!
+    :param roi: (x1, y1, x2, y2), loc of the target. only 1 roi supported.
+        absolute size. not ratio!
     :param dst_size: size of output
     :return: a smaller frame of size dst_size = (new_w, new_h)
     """
     xmin, ymin, xmax, ymax = roi
-    w, h  = roi[2] - roi[0], roi[3] - roi[1]
+    w, h = roi[2] - roi[0], roi[3] - roi[1]
     W_raw, H_raw = img_size_y_x
     W_dst, H_dst = dst_size
     x_lmargin, y_lmargin, x_rmargin, y_rmargin = xmin, ymin, W_raw - xmax, H_raw - ymax
 
     if x_lmargin > x_rmargin:
         if x_rmargin != 0:
-            dx_r = 0
-        else:
             dx_r = random.randint(0, min(x_rmargin, W_dst - w))
+        else:
+            dx_r = 0
         xmax_dst = xmax + dx_r
         xmin_dst = xmax_dst - W_dst
-        
+
     else:
         if x_lmargin != 0:
             dx_l = random.randint(0, min(x_lmargin, W_dst - w))
@@ -84,8 +86,9 @@ def cropToROI(img, img_size_y_x, roi, dst_size):
 
     xmin_dst, ymin_dst, xmax_dst, ymax_dst = \
         int(xmin_dst), int(ymin_dst), int(xmax_dst), int(ymax_dst)
-    dst_img = img[ymin_dst:ymax_dst, xmin_dst:xmax_dst :]
-    new_loc = [xmin - xmin_dst, ymin- ymin_dst, xmax-xmin_dst, ymax - ymin_dst]
+    dst_img = img[ymin_dst:ymax_dst, xmin_dst:xmax_dst]
+    print(ymin_dst, ymax_dst, xmin_dst, xmax_dst)
+    new_loc = [xmin - xmin_dst, ymin - ymin_dst, xmax - xmin_dst, ymax - ymin_dst]
     return (dst_img, new_loc)
 
 
@@ -113,7 +116,7 @@ def labelj2xml():
     print("%s labeled images processed." % idx)
 
 
-def labelj2lst(data_path, IF_CROP=False, dst_size = None):
+def labelj2lst(data_path, IF_CROP=False, dst_size=None):
     lst = []
     if IF_CROP:
         if not os.path.exists(data_path + "cropped"):
@@ -138,7 +141,8 @@ def labelj2lst(data_path, IF_CROP=False, dst_size = None):
 
                 if IF_CROP:
                     img_name = data_path + "cropped/" + frame_name
-                    each_frame, new_roi = cropToROI(each_frame, (each_frame.shape[1], each_frame.shape[0]), (xmin, ymin, xmax, ymax),
+                    each_frame, new_roi = cropToROI(each_frame, (each_frame.shape[1], each_frame.shape[0]),
+                                                    (xmin, ymin, xmax, ymax),
                                                     dst_size)
                     xmin, ymin, xmax, ymax = new_roi
                     width, height = dst_size
@@ -170,5 +174,6 @@ def labelj2lst(data_path, IF_CROP=False, dst_size = None):
     print("%s labeled images processed." % idx)
 
 
-labelj2lst("output/", True, (640, 480))
-os.system("python3 im2rec.py output/cropped/train.lst ./ --pack-label")
+def test():
+    labelj2lst("output/", True, (640, 480))
+    os.system("python3 im2rec.py output/cropped/train.lst ./ --pack-label")

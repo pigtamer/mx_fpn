@@ -5,6 +5,7 @@ from ssd.anchor_params import *
 from utils.utils import concat_preds
 from syms import resnet50_hybrid as res50h
 import ssd
+from gluoncv import model_zoo
 
 
 class ChannelAdapt(nn.HybridBlock):
@@ -170,47 +171,60 @@ class FPN(nn.HybridBlock):
                 sym.concat(*cls_preds, dim=1),
                 sym.concat(*bbox_preds, dim=1))
 
+prenet = model_zoo.resnet50_v1b(pretrained=True, ctx=mx.gpu())
+basenet = nn.HybridSequential()
+for layers in prenet._children:
+    basenet.add(prenet._children[layers])
+basenet = basenet[0:-3]
+
+feat0 = basenet[0:6]
+feat1 = basenet[6]
+feat2 = basenet[7]
 
 class ResNet_FPN(nn.HybridBlock):
     def __init__(self, num_layers=3, num_classes=1, **kwargs):
         super().__init__(**kwargs)
-        self.BaseBlk = res50h.ResNet50(
-            params={
-                "channels":
-                    [[[64, 64, 256]] * 3,
-                     [[128, 128, 512]] * 4],
-                "kernel_sizes":
-                    [[[1, 3, 1]] * 3,
-                     [[1, 3, 1]] * 4],
-                "branches":
-                    [{"channel": 256, "kernel_size": 1, "stride": 1, "padding": 0},
-                     {"channel": 512, "kernel_size": 1, "stride": 2, "padding": 0}]
-            },
-            IF_DENSE=False,
-            IF_HEAD=True
-        )
-        self.feature_blk_1 = res50h.ResNet50(
-            params={"channels": [[[256, 256, 1024]] * 6],
-                    "kernel_sizes": [[[1, 3, 1]] * 6],
-                    "branches":
-                        [{"channel": 1024, "kernel_size": 1, "stride": 2, "padding": 0}]
-                    },
-            IF_DENSE=False,
-            IF_HEAD=True
-        )
-        self.feature_blk_2 = res50h.ResNet50(
-            params={"channels": [[[512, 512, 2048]] * 3],
-                    "kernel_sizes": [[[1, 3, 1]] * 3],
-                    "branches":
-                        [{"channel": 2048, "kernel_size": 1, "stride": 2, "padding": 0}]
-                    },
-            IF_DENSE=False,
-            IF_HEAD=True
-        )
+        # self.BaseBlk = res50h.ResNet50(
+        #     params={
+        #         "channels":
+        #             [[[64, 64, 256]] * 3,
+        #              [[128, 128, 512]] * 4],
+        #         "kernel_sizes":
+        #             [[[1, 3, 1]] * 3,
+        #              [[1, 3, 1]] * 4],
+        #         "branches":
+        #             [{"channel": 256, "kernel_size": 1, "stride": 1, "padding": 0},
+        #              {"channel": 512, "kernel_size": 1, "stride": 2, "padding": 0}]
+        #     },
+        #     IF_DENSE=False,
+        #     IF_HEAD=True
+        # )
+        # self.feature_blk_1 = res50h.ResNet50(
+        #     params={"channels": [[[256, 256, 1024]] * 6],
+        #             "kernel_sizes": [[[1, 3, 1]] * 6],
+        #             "branches":
+        #                 [{"channel": 1024, "kernel_size": 1, "stride": 2, "padding": 0}]
+        #             },
+        #     IF_DENSE=False,
+        #     IF_HEAD=True
+        # )
+        # self.feature_blk_2 = res50h.ResNet50(
+        #     params={"channels": [[[512, 512, 2048]] * 3],
+        #             "kernel_sizes": [[[1, 3, 1]] * 3],
+        #             "branches":
+        #                 [{"channel": 2048, "kernel_size": 1, "stride": 2, "padding": 0}]
+        #             },
+        #     IF_DENSE=False,
+        #     IF_HEAD=True
+        # )
 
-        self.ssd_1 = ssd.LightRetina(num_cls=1, num_ach=retina_num_anchors)
-        self.ssd_2 = ssd.LightRetina(num_cls=1, num_ach=retina_num_anchors)
-        self.ssd_3 = ssd.LightRetina(num_cls=1, num_ach=retina_num_anchors)
+        self.BaseBlk = feat0
+        self.feature_blk_1 = feat1
+        self.feature_blk_2 = feat2
+
+        self.ssd_1 = ssd.LightRetina(num_cls=1, num_ach=num_anchors)
+        self.ssd_2 = ssd.LightRetina(num_cls=1, num_ach=num_anchors)
+        self.ssd_3 = ssd.LightRetina(num_cls=1, num_ach=num_anchors)
 
         self.chan_align_32 = ChannelAdapt(out_channels=1024)
         self.chan_align_21 = ChannelAdapt(out_channels=512)
@@ -223,9 +237,9 @@ class ResNet_FPN(nn.HybridBlock):
 
         fusion_33 = fmap_3  # placeholder. to be deleted in the future
         fusion_32 = hybrid_fusionFMaps(fmap_2, self.chan_align_32(fusion_33),
-                                       neighbor_scale=4, method='bilinear')
+                                       neighbor_scale=2, method='bilinear')
         fusion_21 = hybrid_fusionFMaps(fmap_1, self.chan_align_21(fusion_32),
-                                       neighbor_scale=4, method='bilinear')
+                                       neighbor_scale=2, method='bilinear')
 
         anchors, cls_preds, bbox_preds = [None] * 3, [None] * 3, [None] * 3
         anchors[2], cls_preds[2], bbox_preds[2] = self.ssd_3(fusion_33)

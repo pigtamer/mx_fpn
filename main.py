@@ -15,7 +15,7 @@ sw = mxb.SummaryWriter(logdir='./logs', flush_secs=5)
 parser = argparse.ArgumentParser()
 parser.add_argument("-l", "--load", dest="load",
                     help="bool: load model to directly infer rather than training",
-                    type=int, default=1)
+                    type=int, default=0)
 parser.add_argument("-b", "--base", dest="base",
                     help="bool: using additional base network",
                     type=int, default=0)
@@ -31,14 +31,14 @@ parser.add_argument("-is", "--imsize", dest="input_size",
 
 parser.add_argument("-lr", "--learning_rate", dest="learning_rate",
                     help="float: learning rate of optimization process",
-                    type=float, default=0.2)
+                    type=float, default=0.005)
 parser.add_argument("-opt", "--optimize", dest="optimize_method",
                     help="optimization method",
-                    type=str, default="adam")
+                    type=str, default="sgd")
 
 parser.add_argument("-dp", "--data_path", dest="data_path",
                     help="str: the path to dataset",
-                    type=str, default="../data/uav")
+                    type=str, default="../data/uav/chengdu/")
 parser.add_argument("-mp", "--model_path", dest="model_path",
                     help="str: the path to load and save model",
                     type=str, default="./FPN-0000.params")
@@ -49,6 +49,12 @@ args = parser.parse_args()
 
 ctx = mx.gpu()
 net = fpn.ResNet_FPN(num_layers=3)
+net._children["ssd_1"].collect_params().setattr("lr_mult", 10)
+net._children["ssd_2"].collect_params().setattr("lr_mult", 10)
+net._children["ssd_3"].collect_params().setattr("lr_mult", 10)
+net._children["chan_align_32"].collect_params().setattr("lr_mult", 10)
+net._children["chan_align_21"].collect_params().setattr("lr_mult", 10)
+
 net.initialize(init="Xavier", ctx=ctx)
 net.hybridize()
 
