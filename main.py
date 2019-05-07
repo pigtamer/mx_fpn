@@ -15,7 +15,7 @@ sw = mxb.SummaryWriter(logdir='./logs', flush_secs=5)
 parser = argparse.ArgumentParser()
 parser.add_argument("-l", "--load", dest="load",
                     help="bool: load model to directly infer rather than training",
-                    type=int, default=0)
+                    type=int, default=1)
 parser.add_argument("-b", "--base", dest="base",
                     help="bool: using additional base network",
                     type=int, default=0)
@@ -44,7 +44,7 @@ parser.add_argument("-mp", "--model_path", dest="model_path",
                     type=str, default="./FPN-0000.params")
 parser.add_argument("-tp", "--test_path", dest="test_path",
                     help="str: the path to your test img",
-                    type=str, default="../data/uav/usc/1479/video1479.avi")
+                    type=str, default="../data/uav/chengdu/video233.mp4")
 args = parser.parse_args()
 
 ctx = mx.gpu()
@@ -88,7 +88,7 @@ else:
 
                 # assign classes and bboxes for each anchor
                 bbox_labels, bbox_masks, cls_labels = nd.contrib.MultiBoxTarget(anchor=anchors, label=Y,
-                                                                        cls_pred=cls_preds.transpose((0, 2, 1)))
+                                                                                cls_pred=cls_preds.transpose((0, 2, 1)))
                 # calc loss
                 l = calc_loss(cls_loss, bbox_loss, cls_preds, cls_labels,
                               bbox_preds, bbox_labels, bbox_masks)
@@ -133,7 +133,8 @@ def display(img, output, frame_idx=0, threshold=0, show_all=0):
         bbox = [row[2:6] * nd.array((w, h, w, h), ctx=row.context)]
         if score == max(lscore):
             cv.rectangle(img, (bbox[0][0].asscalar(), bbox[0][1].asscalar()),
-                         (bbox[0][2].asscalar(), bbox[0][3].asscalar()), (1. * (1 - score), 1. * score, 1. * (1 - score)),
+                         (bbox[0][2].asscalar(), bbox[0][3].asscalar()),
+                         (1. * (1 - score), 1. * score, 1. * (1 - score)),
                          int(10 * score))
 
             cv.putText(img, "f%s:%3.2f" % (frame_idx, score), org=(bbox[0][0].asscalar(), bbox[0][1].asscalar()),
