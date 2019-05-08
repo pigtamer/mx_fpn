@@ -15,16 +15,16 @@ sw = mxb.SummaryWriter(logdir='./logs', flush_secs=5)
 parser = argparse.ArgumentParser()
 parser.add_argument("-l", "--load", dest="load",
                     help="bool: load model to directly infer rather than training",
-                    type=int, default=1)
+                    type=int, default=0)
 parser.add_argument("-b", "--base", dest="base",
                     help="bool: using additional base network",
                     type=int, default=0)
 parser.add_argument("-e", "--epoches", dest="num_epoches",
                     help="int: trainig epoches",
-                    type=int, default=20)
+                    type=int, default=100)
 parser.add_argument("-bs", "--batch_size", dest="batch_size",
                     help="int: batch size for training",
-                    type=int, default=4)
+                    type=int, default=6)
 parser.add_argument("-is", "--imsize", dest="input_size",
                     help="int: input size",
                     type=int, default=256)
@@ -38,13 +38,13 @@ parser.add_argument("-opt", "--optimize", dest="optimize_method",
 
 parser.add_argument("-dp", "--data_path", dest="data_path",
                     help="str: the path to dataset",
-                    type=str, default="../data/uav/chengdu/")
+                    type=str, default="../data/uav/usc/1479/raw/")
 parser.add_argument("-mp", "--model_path", dest="model_path",
                     help="str: the path to load and save model",
                     type=str, default="./FPN-0000.params")
 parser.add_argument("-tp", "--test_path", dest="test_path",
                     help="str: the path to your test img",
-                    type=str, default="../data/uav/chengdu/video233.mp4")
+                    type=str, default="../data/uav/usc/1479/video1479.avi")
 args = parser.parse_args()
 
 ctx = mx.gpu()
@@ -63,7 +63,7 @@ train_iter, val_iter = predata.load_data_uav(args.data_path, batch_size, edge_si
 batch = train_iter.next()
 
 trainer = mx.gluon.Trainer(net.collect_params(), args.optimize_method,
-                           {'learning_rate': args.learning_rate, 'wd': 5e-4})
+                           {'learning_rate': args.learning_rate, 'wd': 0})
 cls_loss = gloss.SoftmaxCrossEntropyLoss()
 bbox_loss = gloss.L1Loss()
 
@@ -101,6 +101,8 @@ else:
         print('epoch %2d, class err %.2e, bbox mae %.2e, time %.1f sec' % (
             epoch + 1, 1 - acc_sum / n, mae_sum / m, time.time() - start))
         # Checkpoint
+        sw.add_scalar("Class_Error", 1 - acc_sum / n, global_step=epoch)
+        sw.add_scalar("Bbox_Error", mae_sum / m, global_step=epoch)
         if (epoch + 1) % 5 == 0:
             net.export('FPN')
             _1, _2, _3 = validate(val_iter, net, ctx)
@@ -148,12 +150,36 @@ def display(img, output, frame_idx=0, threshold=0, show_all=0):
     cv.waitKey(10)
 
 
+def eval_pred_iou(preds, gts, iou_thres, IF_COCO=False):
+    """
+    evaluate avg precision by iou of preds and gts
+    :param preds: a list consisting of best prediction on each frame.
+        please record preds in such a format in advance
+    :param gts: a list of marked gts
+    :param iou_thres: threshold of iou
+    :param IF_COCO: whether the bboxes were in coco format
+    :return: avg precision
+    """
+    from utils import coco_af
+    assert len(preds) == len(gts)
+    bingo = 0
+    for k in range(len(preds)):
+        if IF_COCO:
+            iou = coco_af.iou_coco(preds[k], gts[k])
+        else:
+            iou = coco_af.iou(preds[k], gts[k])
+        if iou >= iou_thres:
+            bingo += 1
+    bingo /= len(preds)
+    return bingo
+
+
 cap = cv.VideoCapture(args.test_path)
 rd = 0
 while True:
     ret, frame = cap.read()
     img = nd.array(frame)
-    feature = image.imresize(img, 512, 512).astype('float32')
+    feature = image.imresize(img, 256, 256).astype('float32')
     X = feature.transpose((2, 0, 1)).expand_dims(axis=0)
 
     countt = time.time()

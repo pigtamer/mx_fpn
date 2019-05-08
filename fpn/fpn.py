@@ -223,9 +223,9 @@ class ResNet_FPN(nn.HybridBlock):
         self.feature_blk_1 = feat1
         self.feature_blk_2 = feat2
 
-        self.ssd_1 = ssd.LightRetina(num_cls=1, num_ach=num_anchors)
-        self.ssd_2 = ssd.LightRetina(num_cls=1, num_ach=num_anchors)
-        self.ssd_3 = ssd.LightRetina(num_cls=1, num_ach=num_anchors)
+        self.ssd_1 = ssd.LightRetina(num_cls=1, num_ach=retina_num_anchors)
+        self.ssd_2 = ssd.LightRetina(num_cls=1, num_ach=retina_num_anchors)
+        self.ssd_3 = ssd.LightRetina(num_cls=1, num_ach=retina_num_anchors)
 
         self.chan_align_32 = ChannelAdapt(out_channels=1024)
         self.chan_align_21 = ChannelAdapt(out_channels=512)
